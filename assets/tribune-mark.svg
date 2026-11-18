@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="ট্রিবিউন বাংলা">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e32635"/>
+      <stop offset="1" stop-color="#8f0c18"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffe1a0"/>
+      <stop offset="1" stop-color="#f3b94f"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="120" height="120" rx="29" fill="url(#bg)"/>
+  <path d="M28 28h72" stroke="#ffffff" stroke-opacity=".2" stroke-width="2" stroke-linecap="round"/>
+  <text x="64" y="91" text-anchor="middle" font-family="Noto Sans Bengali,Hind Siliguri,sans-serif" font-size="76" font-weight="800" fill="#fff">ট</text>
+  <path d="M36 105h56" stroke="url(#gold)" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="101" cy="28" r="5" fill="#f7c66d"/>
+</svg>
