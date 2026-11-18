@@ -10,6 +10,7 @@ const schema=readFileSync(new URL("../supabase/migrations/20261118213620_initial
 const workflows=readFileSync(new URL("../supabase/migrations/20261118215912_portal_workflows.sql",import.meta.url),"utf8");
 const media=readFileSync(new URL("../supabase/migrations/20261118220732_media_sections.sql",import.meta.url),"utf8");
 const ingestion=readFileSync(new URL("../supabase/functions/ingest-news/index.ts",import.meta.url),"utf8");
+const functionConfig=readFileSync(new URL("../supabase/config.toml",import.meta.url),"utf8");
 const ids=["home","category","article","search","login","register","account","reporter","reporterProfile","admin","news","categories","videosAdmin","epapersAdmin","auto","applications","users","video","epaper","contact","about","privacy"];
 assert.match(html,/<html lang="bn">/);
 assert.match(html,/type="module" src="\/app.js"/);
@@ -43,7 +44,8 @@ assert.match(workflows,/set_user_role/);
 assert.match(workflows,/get_reporter_profile/);
 assert.match(ingestion,/AUTO_NEWS_SHARED_SECRET/);
 assert.match(ingestion,/status: "pending"/);
-assert.match(ingestion,/SUPABASE_SERVICE_ROLE_KEY/);
+assert.match(ingestion,/SUPABASE_SECRET_KEYS/);
+assert.match(functionConfig,/verify_jwt = false/);
 assert.match(app,/video_posts/);
 assert.match(app,/epapers/);
 assert.match(app,/epaper-pdfs/);
