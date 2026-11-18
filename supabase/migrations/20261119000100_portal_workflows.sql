@@ -96,7 +96,7 @@ language plpgsql security definer set search_path=''
 as $$
 begin
  if auth.uid() is null or (select auth.jwt())->'app_metadata'->>'role'<>'super_admin' then raise exception 'Only primary administrator' using errcode='42501'; end if;
- return query select u.id,u.email,coalesce(u.raw_app_meta_data->>'role','reader'),u.created_at from auth.users u order by u.created_at desc;
+ return query select u.id,u.email::text,coalesce(u.raw_app_meta_data->>'role','reader'),u.created_at from auth.users u order by u.created_at desc;
 end;
 $$;
 revoke all on function private.list_user_access() from public,anon;
@@ -159,8 +159,11 @@ using ((status='published' and published_at is not null and published_at<=now())
 drop policy if exists categories_admin_manage on public.categories;
 drop policy if exists categories_public_active on public.categories;
 create policy categories_public_active on public.categories for select to anon,authenticated using (is_active=true or (select auth.jwt())->'app_metadata'->>'role' in ('super_admin','admin'));
+drop policy if exists categories_admin_insert on public.categories;
 create policy categories_admin_insert on public.categories for insert to authenticated with check ((select auth.jwt())->'app_metadata'->>'role' in ('super_admin','admin'));
+drop policy if exists categories_admin_update on public.categories;
 create policy categories_admin_update on public.categories for update to authenticated using ((select auth.jwt())->'app_metadata'->>'role' in ('super_admin','admin')) with check ((select auth.jwt())->'app_metadata'->>'role' in ('super_admin','admin'));
+drop policy if exists categories_admin_delete on public.categories;
 create policy categories_admin_delete on public.categories for delete to authenticated using ((select auth.jwt())->'app_metadata'->>'role' in ('super_admin','admin'));
 
 drop policy if exists applications_admin_update on public.reporter_applications;
@@ -171,8 +174,11 @@ create policy applications_select_owner_or_admin on public.reporter_applications
 drop policy if exists reporter_profiles_admin_manage on public.reporter_profiles;
 drop policy if exists reporter_profiles_self_or_admin_read on public.reporter_profiles;
 create policy reporter_profiles_self_or_admin_read on public.reporter_profiles for select to authenticated using (user_id=(select auth.uid()) or (select auth.jwt())->'app_metadata'->>'role' in ('super_admin','admin','reporter_admin'));
+drop policy if exists reporter_profiles_admin_insert on public.reporter_profiles;
 create policy reporter_profiles_admin_insert on public.reporter_profiles for insert to authenticated with check ((select auth.jwt())->'app_metadata'->>'role' in ('super_admin','admin','reporter_admin'));
+drop policy if exists reporter_profiles_admin_update on public.reporter_profiles;
 create policy reporter_profiles_admin_update on public.reporter_profiles for update to authenticated using ((select auth.jwt())->'app_metadata'->>'role' in ('super_admin','admin','reporter_admin')) with check ((select auth.jwt())->'app_metadata'->>'role' in ('super_admin','admin','reporter_admin'));
+drop policy if exists reporter_profiles_admin_delete on public.reporter_profiles;
 create policy reporter_profiles_admin_delete on public.reporter_profiles for delete to authenticated using ((select auth.jwt())->'app_metadata'->>'role' in ('super_admin','admin','reporter_admin'));
 
 drop policy if exists auto_queue_admin_delete on public.auto_news_queue;
