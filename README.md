@@ -24,7 +24,11 @@ Isolated development project for the approved 18-page Tribune Bangla redesign.
 - Audit records for privileged auto-news, reporter review and role changes.
 - CI smoke tests and security headers.
 
-## Auto-news ingestion deployment\n\nThe Edge Function source is in `supabase/functions/ingest-news/index.ts`. Before deploying it, set a strong `AUTO_NEWS_SHARED_SECRET` in Supabase Edge Function secrets. Supabase provides `SUPABASE_URL` and `SUPABASE_SECRET_KEYS` at runtime by default; the function reads the modern secret key and falls back to the legacy service-role variable. Never commit or share either key. Connect an RSS provider or scheduled fetcher to POST validated items with the `x-ingest-secret` header. This function only queues pending stories; it cannot publish them. No function has been deployed yet.\n\n## Run checks
+## Auto-news ingestion deployment
+
+The Edge Function source is in `supabase/functions/ingest-news/index.ts`. Before deploying it, set a strong `AUTO_NEWS_SHARED_SECRET` in Supabase Edge Function secrets. Supabase provides `SUPABASE_URL` and `SUPABASE_SECRET_KEYS` at runtime by default; the function reads the modern secret key and falls back to the legacy service-role variable. Never commit or share either key. Connect an RSS provider or scheduled fetcher to POST validated items with the `x-ingest-secret` header. This function only queues pending stories; it cannot publish them. No function has been deployed yet.
+
+## Run checks
 ```sh
 npm run check
 npm test
