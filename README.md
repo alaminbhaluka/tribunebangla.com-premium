@@ -12,10 +12,10 @@ Isolated development project for the approved 18-page Tribune Bangla redesign.
 - Responsive Bengali news portal shell and 18 page families.
 - Supabase client configuration using a publishable key only.
 - Phone + password signup/login UI (OTP-free signup requires Phone confirmations disabled in Supabase Auth settings).
-- Public published-news listing, category pages, article pages and search.
+- Public published-news listing, category pages, article pages, video and e-paper sections, and search.
 - Reader profile and reporter application form.
 - Reporter dashboard and draft/pending article submission.
-- Admin news editing, category CRUD, role-aware deletion and editor publication controls.
+- Admin news editing, category CRUD, video/e-paper publishing, role-aware deletion and editor publication controls.
 - Secret-protected auto-news ingestion endpoint that can only enqueue pending items, plus review and server-side approval-and-publish RPC.
 - Reporter application review and role assignment.
 - Super-admin-only account role listing and delegated-role changes.
