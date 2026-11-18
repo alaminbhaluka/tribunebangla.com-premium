@@ -6,6 +6,5 @@
   "scripts": {
     "check": "node --check app.js && node --check api/share.js",
     "test": "node scripts/smoke-test.mjs"
-  },
-  "type": "module"
+  }
 }
