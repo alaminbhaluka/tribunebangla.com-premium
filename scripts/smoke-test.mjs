@@ -50,7 +50,7 @@ assert.match(ingestion,/AUTO_NEWS_SHARED_SECRET/);
 assert.match(ingestion,/status: "pending"/);
 assert.match(ingestion,/SUPABASE_SECRET_KEYS/);
 assert.doesNotMatch(ingestion,/\\\
-assert.doesNotMatch(ingestion,/\\\\n/,"Ingestion source must not contain literal escaped newlines");
+assert.equal(ingestion.includes("\\n"), false, "Ingestion source must not contain literal escaped newlines");
 assert.match(functionConfig,/verify_jwt = false/);
 assert.match(app,/video_posts/);
 assert.match(app,/epapers/);
