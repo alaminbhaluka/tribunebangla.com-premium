@@ -22,6 +22,9 @@
 - [x] Public news, category and article queries.
 - [x] Reader phone/password auth UI; confirmation setting still needs dashboard configuration.
 - [x] Reporter application and approval RPC.
+- [x] Unique five-digit reporter ID generation and public professional profile display.
+- [x] Pending auto-news editing/deletion and published auto-news count in admin dashboard.
+- [x] Site wordmark/favicon URL customization.
 - [x] News draft/pending submission and editor publication UI.
 - [x] Category administration and protected profile column privileges.
 - [x] Video and e-paper data modules, editor publishing screens and PDF storage.
@@ -34,6 +37,14 @@
 - [x] Source-controlled initial and follow-up database migrations match the applied Supabase migration history.
 
 ## Remaining before preview signoff
+1. **Manual Supabase Auth settings:** disable Phone confirmations for the approved OTP-free phone/password signup and enable leaked-password protection. The connected Supabase API does not expose these Auth dashboard toggles.
+2. **Auto-news secrets:** set `AUTO_NEWS_SHARED_SECRET` in Supabase Edge Function secrets, and matching sensitive Preview variables `AUTO_NEWS_SHARED_SECRET` and `CRON_SECRET` in Vercel. The current Vercel Preview environment has no variables configured, so the daily RSS Cron cannot run yet.
+3. **Secure account invitation:** add an owner-controlled invite workflow before delegating privileged roles to new accounts.
+4. **End-to-end verification:** test reader, reporter, editor, auto-news admin and super-admin sessions against real browser flows.
+5. **Preview domain and SEO:** configure/verify `preview.tribunebangla.com`, confirm social metadata and canonical URLs, and add sitemap/robots validation.
+6. **Release readiness:** accessibility, responsive-device, backup/restore and rollback checks.
+
+<!-- Previously tracked tasks below are retained for historical context. -->
 1. Disable Phone confirmations in Supabase Auth to meet no-OTP signup; enable leaked-password protection.
 2. Verify the migration and all policies on a clean staging database.
 3. Configure ingestion secrets, deploy the pending-only ingestion function, and select RSS/news sources plus a schedule.\n4. Configure the preview deployment and DNS; neither is currently verified.
