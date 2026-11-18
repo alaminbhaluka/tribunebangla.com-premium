@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
 const html=readFileSync(new URL("../index.html",import.meta.url),"utf8");
 const app=readFileSync(new URL("../app.js",import.meta.url),"utf8");
+const share=readFileSync(new URL("../api/share.js",import.meta.url),"utf8");
 const css=readFileSync(new URL("../styles.css",import.meta.url),"utf8");
 const config=readFileSync(new URL("../config.js",import.meta.url),"utf8");
 const vercel=JSON.parse(readFileSync(new URL("../vercel.json",import.meta.url),"utf8"));
@@ -24,4 +25,9 @@ assert.doesNotMatch(config,/service_role|service_role_key|sb_secret_|eyJ[a-zA-Z0
 assert.match(css,/@media\(max-width:760px\)/);
 assert.equal(vercel.rewrites[0].destination,"/index.html");
 assert.ok(vercel.headers.length>=4);
+assert.equal(vercel.rewrites[0].destination,"/api/share?slug=:slug");
+assert.match(share,/og:title/);
+assert.match(share,/og:description/);
+assert.match(share,/og:image/);
+assert.match(share,/twitter:card/);
 console.log("TribuneBangla smoke tests passed: route set, Supabase auth, moderation, role APIs, media bucket, responsive layout and security headers.");
