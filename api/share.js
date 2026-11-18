@@ -1,7 +1,7 @@
 const fallbackUrl = "https://tdyrxdnqyuebtzhjuprh.supabase.co";
 const fallbackKey = "sb_publishable___JNcLdKcXvRSSdP6ZoA7A_mVDD2phD";
 const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-export default async function handler(req,res) {
+module.exports = async function handler(req,res) {
   const slug = String(req.query?.slug || "").trim();
   const host = String(req.headers["x-forwarded-host"] || req.headers.host || "preview.tribunebangla.com").split(",")[0].trim();
   const proto = String(req.headers["x-forwarded-proto"] || "https").split(",")[0].trim();
