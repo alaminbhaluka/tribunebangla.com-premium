@@ -208,3 +208,23 @@ drop policy if exists news_media_editor_update on storage.objects;
 create policy news_media_editor_update on storage.objects for update to authenticated using (bucket_id='news-media' and (select auth.jwt())->'app_metadata'->>'role' in ('super_admin','admin','editor')) with check (bucket_id='news-media' and (select auth.jwt())->'app_metadata'->>'role' in ('super_admin','admin','editor'));
 drop policy if exists news_media_admin_delete on storage.objects;
 create policy news_media_admin_delete on storage.objects for delete to authenticated using (bucket_id='news-media' and (select auth.jwt())->'app_metadata'->>'role' in ('super_admin','admin'));
+
+
+-- Public reporter profile exposes only approved professional fields, never address or phone.
+create or replace function private.get_reporter_profile(p_user_id uuid)
+returns table(display_name text,reporter_type text,designation text,assigned_area text)
+language sql security definer set search_path=''
+as $$
+ select p.display_name::text,rp.reporter_type,rp.designation,rp.assigned_area
+ from public.reporter_profiles rp join public.profiles p on p.id=rp.user_id
+ where rp.user_id=p_user_id and rp.is_active=true limit 1
+$$;
+revoke all on function private.get_reporter_profile(uuid) from public;
+grant usage on schema private to anon;
+grant execute on function private.get_reporter_profile(uuid) to anon,authenticated;
+create or replace function public.get_reporter_profile(p_user_id uuid)
+returns table(display_name text,reporter_type text,designation text,assigned_area text)
+language sql security invoker set search_path=''
+as $$ select * from private.get_reporter_profile(p_user_id) $$;
+revoke all on function public.get_reporter_profile(uuid) from public;
+grant execute on function public.get_reporter_profile(uuid) to anon,authenticated;
