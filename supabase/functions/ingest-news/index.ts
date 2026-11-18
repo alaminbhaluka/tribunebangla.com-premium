@@ -34,24 +34,24 @@ function decodeXml(value: string): string {
 }
 function tag(block: string, names: string[]): string {
   for (const name of names) {
-    const re = new RegExp("<(?:[\\w.-]+:)?" + name + "(?:\\s[^>]*)?>([\\s\\S]*?)<\\/(?:[\\w.-]+:)?" + name + "\\s*>", "i");
+    const re = new RegExp("<(?:[\\w.-]+:)?" + name + "(?:\\s[^>]*)?>([\s\S]*?)<\\/(?:[\\w.-]+:)?" + name + "\\s*>", "i");
     const match = block.match(re);
-    if (match) return decodeXml(match[1]).replace(/<[^>]+>/g, " ").replace(/\\s+/g, " ").trim();
+    if (match) return decodeXml(match[1]).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
   }
   return "";
 }
 function itemLink(block: string): string | null {
-  const atom = block.match(/<link\\b[^>]*href=["']([^"']+)["'][^>]*>/i);
+  const atom = block.match(/<link\b[^>]*href=["']([^"']+)["'][^>]*>/i);
   const raw = atom?.[1] || tag(block, ["link"]);
   return safeUrl(raw);
 }
 function imageLink(block: string): string | null {
-  const match = block.match(/<(?:media:content|media:thumbnail|enclosure)\\b[^>]*url=["']([^"']+)["']/i)
-    || block.match(/<img\\b[^>]*src=["']([^"']+)["']/i);
+  const match = block.match(/<(?:media:content|media:thumbnail|enclosure)\b[^>]*url=["']([^"']+)["']/i)
+    || block.match(/<img\b[^>]*src=["']([^"']+)["']/i);
   return safeUrl(match?.[1]);
 }
 function rssItems(xml: string, source: {name:string;url:string}) {
-  const blocks = [...xml.matchAll(/<(item|entry)\\b[^>]*>([\\s\\S]*?)<\\/\\1>/gi)].slice(0, 15);
+  const blocks = [...xml.matchAll(/<(item|entry)\b[^>]*>([\s\S]*?)<\/\1>/gi)].slice(0, 15);
   const out = [];
   for (const match of blocks) {
     const block = match[2];
