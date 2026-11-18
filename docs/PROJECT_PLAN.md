@@ -8,38 +8,39 @@
 - No production deployment or domain cutover before full QA and explicit owner approval.
 
 ## Approved decisions
-- Use a separate preview deployment first.
-- Automatically collected stories enter a review queue; an authorized editor must approve before publication.
-- One primary administrator and multiple delegated administrators with least-privilege roles.
-- Reader login uses Bangladesh mobile number and password; SMS OTP is not required.
-- Delegated administrators may manage representative type/designation, but may not arbitrarily edit readers' personal name or address.
+- Separate preview deployment first; no production publish until approval.
+- Automatically collected stories remain pending until authorized human approval.
+- One primary administrator plus delegated admins with least-privilege roles.
+- Reader signup/login uses Bangladesh mobile number and password without SMS OTP.
+- Delegated admins may manage reporter type/designation, but must not edit reader personal name/address.
+- Free Supabase plan only; do not upgrade or enable paid services without explicit approval.
 
-## Delivery phases
-1. Responsive implementation of the approved 18-page design.
-2. Data model, authentication, profiles and representative applications.
-3. Editorial CMS: drafts, review, scheduling, publishing, revisions and media.
-4. Role-based admin console and auditable administrator actions.
-5. Auto-news ingestion into moderation queue (never direct publish).
-6. Preview deployment, end-to-end tests, accessibility, security and performance.
-7. Owner sign-off, backup/rollback plan and separately approved production cutover.
+## Implemented
+- [x] Isolated GitHub repository and development branch.
+- [x] Responsive portal shell and all 18 route families.
+- [x] Supabase project, 8 initial RLS-enabled tables, and super-admin account.
+- [x] Public news, category and article queries.
+- [x] Reader phone/password auth UI; confirmation setting still needs dashboard configuration.
+- [x] Reporter application and approval RPC.
+- [x] News draft/pending submission and editor publication UI.
+- [x] Pending-only auto-news queue and server-side human approval RPC.
+- [x] Super-admin account listing and delegated role change RPC.
+- [x] News media bucket and role-scoped storage policies.
+- [x] Audit logging for privileged role and approval actions.
+- [x] CI workflow and smoke tests added.
 
-## The 18 page families
-Home; category; article detail; search; reporter profile; login; reader registration; reader dashboard; reporter dashboard; admin dashboard; news management; representative management; video news; e-paper; contact; about; privacy policy; not found.
-
-## Foundation status
-- [x] Isolated development branch created.
-- [x] Responsive shell and route resolver added.
-- [x] All 18 page families represented.
-- [x] Safe empty states; no fabricated published news or account data.
-- [x] Baseline security headers and environment guardrails added.
-- [ ] Supabase project/credentials confirmed for isolated environment.
-- [ ] Database schema and row-level security designed and tested.
-- [ ] Authentication, editorial workflow, admin roles and media storage implemented.
-- [ ] Preview domain connected and end-to-end QA completed.
+## Remaining before preview signoff
+1. Disable Phone confirmations in Supabase Auth to meet no-OTP signup; enable leaked-password protection.
+2. Verify the migration and all policies on a clean staging database.
+3. Configure the preview deployment and DNS; neither is currently verified.
+4. Add server-rendered Open Graph metadata for link sharing.
+5. Add secure account invitation flow and test role revocation/session refresh.
+6. Complete end-to-end tests for reader, reporter, editor, auto-news admin and super-admin.
+7. Accessibility, responsive-device, backup/restore and rollback checks.
 
 ## Release gates
-- Never expose Supabase service-role/secret keys to browser code.
-- Every exposed table must have deliberate RLS policies.
-- Authorization is enforced server/database-side, not by hiding UI controls.
-- Auto-news remains unpublished until explicit human editorial approval.
-- No production deployment until critical flows pass and the owner approves.
+- Never expose a service-role or secret key in browser code.
+- All exposed tables have deliberate RLS policies.
+- Authorization is enforced in the database, not only by hiding UI controls.
+- Auto-news never publishes without a human approval action.
+- Production remains untouched until tests pass and the owner approves.
