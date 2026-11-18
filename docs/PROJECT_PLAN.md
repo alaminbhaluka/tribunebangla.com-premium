@@ -24,6 +24,7 @@
 - [x] Reporter application and approval RPC.
 - [x] News draft/pending submission and editor publication UI.
 - [x] Category administration and protected profile column privileges.
+- [x] Video and e-paper data modules, editor publishing screens and PDF storage.
 - [x] Server-rendered Open Graph/Twitter metadata route for article links.
 - [x] Pending-only auto-news queue, secret-protected ingestion endpoint source and server-side human approval RPC.
 - [x] Super-admin account listing and delegated role change RPC.
