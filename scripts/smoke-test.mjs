@@ -35,7 +35,7 @@ assert.equal(vercel.rewrites[0].destination,"/api/share?slug=:slug");
 assert.match(share,/og:title/);
 assert.match(share,/og:description/);
 assert.match(share,/og:image/);
-assert.match(share,/twitter:card/);
+assert.match(share,/twitter:card/);\nassert.match(share,/PUBLIC_SITE_URL/);\nassert.match(share,/preview\\.tribunebangla\\.com/);\nassert.match(share,/safeImageUrl/);\nassert.doesNotMatch(share,/x-forwarded-host|x-forwarded-proto/,"Canonical URLs must not trust request host headers");
 for(const table of ["profiles","categories","news","reporter_applications","reporter_profiles","auto_news_queue","admin_audit_logs","site_settings"])assert.match(schema,new RegExp("create table if not exists public\\."+table));
 assert.match(schema,/enable row level security/g);
 assert.match(workflows,/approve_auto_news/);
