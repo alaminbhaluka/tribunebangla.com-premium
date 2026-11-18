@@ -15,11 +15,12 @@ Isolated development project for the approved 18-page Tribune Bangla redesign.
 - Public published-news listing, category pages, article pages and search.
 - Reader profile and reporter application form.
 - Reporter dashboard and draft/pending article submission.
-- Admin news editing, role-aware deletion, editor publication controls.
+- Admin news editing, category CRUD, role-aware deletion and editor publication controls.
 - Pending auto-news review and a server-side approval-and-publish RPC.
 - Reporter application review and role assignment.
 - Super-admin-only account role listing and delegated-role changes.
 - Public news-media storage bucket with restricted editor upload policies.
+- Server-rendered Open Graph and Twitter metadata for article links.
 - Audit records for privileged auto-news, reporter review and role changes.
 - CI smoke tests and security headers.
 
