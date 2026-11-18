@@ -38,7 +38,11 @@ Deno.serve(async (req: Request) => {
   }
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
-  let serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";\n  const secretKeysJson = Deno.env.get("SUPABASE_SECRET_KEYS");\n  if (secretKeysJson) {\n    try { serviceKey = JSON.parse(secretKeysJson).default || serviceKey; } catch { return reply(503, { error: "Supabase secret-key configuration is invalid" }); }\n  }
+  let serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
+  const secretKeysJson = Deno.env.get("SUPABASE_SECRET_KEYS");
+  if (secretKeysJson) {
+    try { serviceKey = JSON.parse(secretKeysJson).default || serviceKey; } catch { return reply(503, { error: "Supabase secret-key configuration is invalid" }); }
+  }
   if (!supabaseUrl || !serviceKey) return reply(503, { error: "Ingestion service is not configured" });
 
   let payload: unknown;
