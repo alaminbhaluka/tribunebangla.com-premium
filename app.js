@@ -4,10 +4,10 @@ const app=document.getElementById('app');
 document.getElementById('year').textContent=String(new Date().getFullYear());
 const routes=[
 {id:'home',path:'/',title:'সর্বশেষ সংবাদ'},
-{id:'category',pattern:/^\\/category\\/([^/]+)\\/?$/,title:'বিভাগভিত্তিক সংবাদ'},
-{id:'article',pattern:/^\\/post\\/([^/]+)\\/?$/,title:'সংবাদের বিস্তারিত'},
+{id:'category',pattern:/^\/category\/([^/]+)\/?$/,title:'বিভাগভিত্তিক সংবাদ'},
+{id:'article',pattern:/^\/post\/([^/]+)\/?$/,title:'সংবাদের বিস্তারিত'},
 {id:'search',path:'/search',title:'সংবাদ অনুসন্ধান'},
-{id:'reporter',pattern:/^\\/reporter\\/([^/]+)\\/?$/,title:'প্রতিনিধির প্রোফাইল'},
+{id:'reporter',pattern:/^\/reporter\/([^/]+)\/?$/,title:'প্রতিনিধির প্রোফাইল'},
 {id:'login',path:'/login',title:'অ্যাকাউন্টে প্রবেশ'},
 {id:'register',path:'/register',title:'পাঠক নিবন্ধন'},
 {id:'reader',path:'/account',title:'পাঠক ড্যাশবোর্ড'},
