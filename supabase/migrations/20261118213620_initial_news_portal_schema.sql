@@ -111,7 +111,7 @@ alter table public.site_settings enable row level security;
 grant usage on schema public to anon,authenticated;
 grant select on public.categories,public.news,public.site_settings to anon,authenticated;
 grant select,insert on public.profiles to authenticated;
-revoke update on public.profiles from authenticated;
+revoke update on public.profiles from public,anon,authenticated;
 grant update(display_name,avatar_url) on public.profiles to authenticated;
 grant select,insert,update on public.reporter_applications to authenticated;
 grant select,insert,update,delete on public.reporter_profiles to authenticated;
