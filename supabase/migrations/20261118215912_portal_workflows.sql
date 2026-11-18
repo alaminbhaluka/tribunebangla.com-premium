@@ -231,3 +231,7 @@ language sql security invoker set search_path=''
 as $$ select * from private.get_reporter_profile(p_user_id) $$;
 revoke all on function public.get_reporter_profile(uuid) from public;
 grant execute on function public.get_reporter_profile(uuid) to anon,authenticated;
+
+-- Keep reader personal fields protected from all authenticated users except self-editable display name/avatar.
+revoke update on table public.profiles from public,anon,authenticated;
+grant update(display_name,avatar_url) on table public.profiles to authenticated;
