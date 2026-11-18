@@ -23,11 +23,14 @@
 - [x] Reader phone/password auth UI; confirmation setting still needs dashboard configuration.
 - [x] Reporter application and approval RPC.
 - [x] News draft/pending submission and editor publication UI.
+- [x] Category administration and protected profile column privileges.
+- [x] Server-rendered Open Graph/Twitter metadata route for article links.
 - [x] Pending-only auto-news queue and server-side human approval RPC.
 - [x] Super-admin account listing and delegated role change RPC.
 - [x] News media bucket and role-scoped storage policies.
 - [x] Audit logging for privileged role and approval actions.
 - [x] CI workflow and smoke tests added; latest development-branch run passed.
+- [x] Source-controlled initial and follow-up database migrations match the applied Supabase migration history.
 
 ## Remaining before preview signoff
 1. Disable Phone confirmations in Supabase Auth to meet no-OTP signup; enable leaked-password protection.
