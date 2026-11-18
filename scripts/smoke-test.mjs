@@ -23,7 +23,7 @@ assert.doesNotMatch(app,/service-role|secret key/i);
 assert.match(config,/sb_publishable_/);
 assert.doesNotMatch(config,/service_role|service_role_key|sb_secret_|eyJ[a-zA-Z0-9_-]{20}/);
 assert.match(css,/@media\(max-width:760px\)/);
-assert.ok(vercel.headers.length>=4);
+assert.ok(vercel.headers[0].headers.length>=4);
 assert.equal(vercel.rewrites[0].destination,"/api/share?slug=:slug");
 assert.match(share,/og:title/);
 assert.match(share,/og:description/);
