@@ -1,0 +1,1 @@
+[functions.ingest-news]\nverify_jwt = false\n
