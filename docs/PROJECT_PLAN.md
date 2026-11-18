@@ -25,7 +25,7 @@
 - [x] News draft/pending submission and editor publication UI.
 - [x] Category administration and protected profile column privileges.
 - [x] Server-rendered Open Graph/Twitter metadata route for article links.
-- [x] Pending-only auto-news queue and server-side human approval RPC.
+- [x] Pending-only auto-news queue, secret-protected ingestion endpoint source and server-side human approval RPC.
 - [x] Super-admin account listing and delegated role change RPC.
 - [x] News media bucket and role-scoped storage policies.
 - [x] Audit logging for privileged role and approval actions.
@@ -35,8 +35,8 @@
 ## Remaining before preview signoff
 1. Disable Phone confirmations in Supabase Auth to meet no-OTP signup; enable leaked-password protection.
 2. Verify the migration and all policies on a clean staging database.
-3. Configure the preview deployment and DNS; neither is currently verified.
-4. Verify server-rendered Open Graph metadata on the deployed preview URL.
+3. Configure ingestion secrets, deploy the pending-only ingestion function, and select RSS/news sources plus a schedule.\n4. Configure the preview deployment and DNS; neither is currently verified.
+5. Verify server-rendered Open Graph metadata on the deployed preview URL.
 5. Add secure account invitation flow and test role revocation/session refresh.
 6. Complete end-to-end tests for reader, reporter, editor, auto-news admin and super-admin.
 7. Accessibility, responsive-device, backup/restore and rollback checks.
