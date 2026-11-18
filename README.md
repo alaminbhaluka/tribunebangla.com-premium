@@ -42,3 +42,13 @@ npm test
 - Run end-to-end tests with the real super-admin session, reader, reporter and delegated admin roles.
 - Configure a secure server-side invite workflow before delegating admin roles to newly created accounts.
 - Do not deploy to production until all gates pass and the owner explicitly approves.
+
+
+## Auto-news RSS setup
+
+- Super-admins can manage up to 20 RSS/Atom feeds in **Admin → Site Settings & RSS Sources**. Use one line per feed: `Publisher Name | https://publisher.example/rss.xml`.
+- RSS entries are inserted into `auto_news_queue` as `pending`; the system never publishes automatically.
+- The deployed `ingest-news` Edge Function checks `AUTO_NEWS_SHARED_SECRET` on every request.
+- Configure the same strong random value as an Edge Function secret named `AUTO_NEWS_SHARED_SECRET` in Supabase and as a sensitive Preview environment variable in Vercel. Configure `CRON_SECRET` as a sensitive Preview environment variable in Vercel. Do not put either value in Git or browser config.
+- Vercel Cron calls `/api/auto-news` daily at 02:00 UTC (08:00 Bangladesh time, within the scheduled hour on Hobby). Deploy a new Preview after setting the variables.
+- You can manually test the endpoint from the Vercel deployment using an authorized cron invocation; do not share the secrets in chat.
