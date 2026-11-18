@@ -1,0 +1,16 @@
+import { readFileSync } from 'node:fs';
+import assert from 'node:assert/strict';
+const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
+const app=readFileSync(new URL('../app.js',import.meta.url),'utf8');
+const css=readFileSync(new URL('../styles.css',import.meta.url),'utf8');
+const vercel=JSON.parse(readFileSync(new URL('../vercel.json',import.meta.url),'utf8'));
+const ids=['home','category','article','search','reporter','login','register','reader','reporterdesk','admin','newsmanage','reportmanage','video','epaper','contact','about','privacy','404'];
+assert.match(html,/<html lang="bn">/);
+assert.match(html,/id="app"/);
+for(const id of ids)assert.ok(app.includes("id:'"+id+"'"),'Missing route '+id);
+assert.equal((app.match(/id:'[^']+'/g)||[]).length,18);
+assert.match(app,/ব্যাকএন্ডের সঙ্গে যুক্ত নয়/);
+assert.match(css,/@media\(max-width:760px\)/);
+assert.equal(vercel.rewrites[0].destination,'/index.html');
+assert.ok(vercel.headers.length);
+console.log('TribuneBangla foundation smoke tests passed: 18 routes, responsive layout, safe pending states, Vercel routing.');

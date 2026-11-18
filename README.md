@@ -1,7 +1,11 @@
-# TribuneBangla — 18-Page Design Preview (2026)
+# TribuneBangla Premium
 
-This repository contains only the standalone HTML preview of the approved 18-page visual redesign. The preview includes its own embedded styles and page interactions.
+Isolated development project for the Tribune Bangla 18-page redesign.
 
-- `preview/18-page-design-draft.html` — standalone 18-page design preview.
+- Development branch: `development/full-portal-foundation`
+- Preview hostname target: `preview.tribunebangla.com`
+- Production repository and production domain remain separate.
 
-No production site files, application code, database content, API handlers, migrations, or deployment configuration are stored here. The original `tribunebangla.com` repository remains separate and unchanged by this design-only archive.
+Run local checks with `npm run check` and `npm test`.
+
+This foundation contains responsive routing and safe empty states. Authentication, database-backed news, editorial publishing, administrator roles and auto-news moderation are not active yet. Automatically collected stories must be approved by an authorized editor before publication.
