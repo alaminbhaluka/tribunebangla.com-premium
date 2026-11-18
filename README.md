@@ -17,7 +17,9 @@ Isolated development project for the approved 18-page Tribune Bangla redesign.
 - Reporter dashboard and draft/pending article submission.
 - Admin news editing, category CRUD, video/e-paper publishing, role-aware deletion and editor publication controls.
 - Secret-protected auto-news ingestion endpoint that can only enqueue pending items, plus review and server-side approval-and-publish RPC.
-- Reporter application review and role assignment.
+- Reporter application review, role assignment, and unique five-digit reporter IDs
+- Admin editing/deletion for pending auto-news queue items; published auto-news remains in the unified news list
+- Site branding settings for wordmark and favicon URLs.
 - Super-admin-only account role listing and delegated-role changes.
 - Public news-media storage bucket with restricted editor upload policies.
 - Server-rendered Open Graph and Twitter metadata for article links.
@@ -26,7 +28,7 @@ Isolated development project for the approved 18-page Tribune Bangla redesign.
 
 ## Auto-news ingestion deployment
 
-The Edge Function source is in `supabase/functions/ingest-news/index.ts`. Before deploying it, set a strong `AUTO_NEWS_SHARED_SECRET` in Supabase Edge Function secrets. Supabase provides `SUPABASE_URL` and `SUPABASE_SECRET_KEYS` at runtime by default; the function reads the modern secret key and falls back to the legacy service-role variable. Never commit or share either key. Connect an RSS provider or scheduled fetcher to POST validated items with the `x-ingest-secret` header. This function only queues pending stories; it cannot publish them. No function has been deployed yet.
+The Edge Function source is in `supabase/functions/ingest-news/index.ts`. Before deploying it, set a strong `AUTO_NEWS_SHARED_SECRET` in Supabase Edge Function secrets. Supabase provides `SUPABASE_URL` and `SUPABASE_SECRET_KEYS` at runtime by default; the function reads the modern secret key and falls back to the legacy service-role variable. Never commit or share either key. Connect an RSS provider or scheduled fetcher to POST validated items with the `x-ingest-secret` header. This function only queues pending stories; it cannot publish them. The `ingest-news` Edge Function is deployed. Its shared secret and the Vercel cron secrets still need to be configured before scheduled RSS collection can run.
 
 ## Run checks
 ```sh
