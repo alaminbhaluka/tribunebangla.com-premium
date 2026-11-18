@@ -193,8 +193,11 @@ create policy audit_admin_read on public.admin_audit_logs for select to authenti
 drop policy if exists settings_admin_manage on public.site_settings;
 drop policy if exists settings_public_read on public.site_settings;
 create policy settings_public_read on public.site_settings for select to anon,authenticated using (key in ('site_name','site_tagline','logo_url','favicon_url','social_links') or (select auth.jwt())->'app_metadata'->>'role' in ('super_admin','admin'));
+drop policy if exists settings_admin_insert on public.site_settings;
 create policy settings_admin_insert on public.site_settings for insert to authenticated with check ((select auth.jwt())->'app_metadata'->>'role' in ('super_admin','admin'));
+drop policy if exists settings_admin_update on public.site_settings;
 create policy settings_admin_update on public.site_settings for update to authenticated using ((select auth.jwt())->'app_metadata'->>'role' in ('super_admin','admin')) with check ((select auth.jwt())->'app_metadata'->>'role' in ('super_admin','admin'));
+drop policy if exists settings_admin_delete on public.site_settings;
 create policy settings_admin_delete on public.site_settings for delete to authenticated using ((select auth.jwt())->'app_metadata'->>'role' in ('super_admin','admin'));
 
 insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types)
