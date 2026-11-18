@@ -1,9 +1,7 @@
-# TribuneBangla Premium Design Backup (2026)
+# TribuneBangla — 18-Page Design Preview (2026)
 
-This repository stores the approved 18-page premium redesign snapshot from `alaminbhaluka/tribunebangla.com`, branch `premium-redesign-preview-2026`.
+This repository contains only the standalone HTML preview of the approved 18-page visual redesign. The preview includes its own embedded styles and page interactions.
 
-The production repository and its `main` branch are not modified by this backup.
+- `preview/18-page-design-draft.html` — standalone 18-page design preview.
 
-Source preview: https://github.com/alaminbhaluka/tribunebangla.com/tree/premium-redesign-preview-2026
-
-This is a design/code backup, not a production deployment. Validate integrations and environment configuration before deploying.
+No production site files, application code, database content, API handlers, migrations, or deployment configuration are stored here. The original `tribunebangla.com` repository remains separate and unchanged by this design-only archive.
