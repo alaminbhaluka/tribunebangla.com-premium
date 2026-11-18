@@ -14,5 +14,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
       - run: npm run check
       - run: npm test
+      - run: deno check supabase/functions/ingest-news/index.ts
