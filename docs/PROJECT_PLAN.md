@@ -19,7 +19,9 @@
 - [x] Isolated GitHub repository and development branch.
 - [x] Responsive portal shell and all 18 route families.
 - [x] Supabase project, 8 initial RLS-enabled tables, and super-admin account.
-- [x] Public news, category and article queries.
+- [x] Public news, category and article queries with the premium lead-story homepage layout.
+- [x] Reader saved-news library with owner-only RLS and save/remove actions.
+- [x] Bengali article social-preview slug handling and Vercel preview canonical URL support.
 - [x] Reader phone/password auth UI; confirmation setting still needs dashboard configuration.
 - [x] Reporter application and approval RPC.
 - [x] Unique five-digit reporter ID generation and public professional profile display.
