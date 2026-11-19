@@ -36,7 +36,7 @@ const form=document.getElementById("login-form");
 const button=document.getElementById("login-submit");
 const errorBox=document.getElementById("login-error");
 const showError=(message)=>{errorBox.textContent=message;errorBox.classList.add("show");};
-const phone=(value)=>{let n=String(value||"").replace(/[\\s()-]/g,"");if(n.startsWith("01")&&n.length===11)n="+88"+n;else if(n.startsWith("880"))n="+"+n;return n;};
+const phone=(value)=>{let n=String(value||"").replace(/[\s()-]/g,"");if(n.startsWith("01")&&n.length===11)n="+88"+n;else if(n.startsWith("880"))n="+"+n;return n;};
 form.addEventListener("submit",async(event)=>{
  event.preventDefault();errorBox.classList.remove("show");
  if(!cfg.supabaseUrl||!cfg.supabasePublishableKey){showError("লগইন সার্ভারের কনফিগারেশন পাওয়া যায়নি।");return;}
