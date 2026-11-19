@@ -29,8 +29,9 @@
 <p class="muted">নতুন পাঠক? <a href="/register">নিবন্ধন করুন</a></p>
 <a href="/" class="muted">← হোম পেইজে ফিরে যান</a>
 </section></div>
-<script type="module">
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const createClient=window.supabase?.createClient;
 const cfg=window.TRIBUNE_CONFIG||{};
 const form=document.getElementById("login-form");
 const button=document.getElementById("login-submit");
@@ -39,7 +40,7 @@ const showError=(message)=>{errorBox.textContent=message;errorBox.classList.add(
 const phone=(value)=>{let n=String(value||"").replace(/[\s()-]/g,"");if(n.startsWith("01")&&n.length===11)n="+88"+n;else if(n.startsWith("880"))n="+"+n;return n;};
 form.addEventListener("submit",async(event)=>{
  event.preventDefault();errorBox.classList.remove("show");
- if(!cfg.supabaseUrl||!cfg.supabasePublishableKey){showError("লগইন সার্ভারের কনফিগারেশন পাওয়া যায়নি।");return;}
+ if(!cfg.supabaseUrl||!cfg.supabasePublishableKey||!createClient){showError("লগইন লাইব্রেরি বা সার্ভার কনফিগারেশন লোড হয়নি। পৃষ্ঠা রিফ্রেশ করে আবার চেষ্টা করুন।");return;}
  const values=new FormData(form),identifier=String(values.get("identifier")||"").trim(),password=String(values.get("password")||"");
  if(!identifier||password.length<8){showError("সঠিক মোবাইল/ইমেইল এবং কমপক্ষে ৮ অক্ষরের পাসওয়ার্ড দিন।");return;}
  button.disabled=true;button.textContent="অপেক্ষা করুন…";
@@ -49,7 +50,8 @@ form.addEventListener("submit",async(event)=>{
   const {data,error}=await db.auth.signInWithPassword(credentials);
   if(error)throw error;
   const role=data.user?.app_metadata?.role||"reader";
-  location.replace(["super_admin","admin","editor","auto_news_admin","reporter_admin"].includes(role)?"/admin":role==="reporter"?"/reporter/dashboard":"/account");
+  button.textContent="লগইন সফল!";
+  location.href=["super_admin","admin","editor","auto_news_admin","reporter_admin"].includes(role)?"/admin":role==="reporter"?"/reporter/dashboard":"/account";
  }catch(error){showError(error?.message||"লগইন করা যায়নি। তথ্য যাচাই করে আবার চেষ্টা করুন。");}
  finally{button.disabled=false;button.textContent="লগইন করুন";}
 });
