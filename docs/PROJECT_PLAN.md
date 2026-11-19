@@ -19,7 +19,8 @@
 - [x] Isolated GitHub repository and development branch.
 - [x] Responsive portal shell and all 18 route families.
 - [x] Supabase project, 8 initial RLS-enabled tables, and super-admin account.
-- [x] Public news, category and article queries with the premium lead-story homepage layout.
+- [x] Public news, category and article queries with the Araler Khobor reference-matched Tribune Bangla homepage, trending strip, sidebars and related stories.
+- [x] Article view counter RPC for popular-news rankings.
 - [x] Reader saved-news library with owner-only RLS and save/remove actions.
 - [x] Reader/reporter notification center with automatic application and article-status alerts.
 - [x] Role-scoped admin dashboard statistics through a security-definer RPC.
