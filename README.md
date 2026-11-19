@@ -13,7 +13,7 @@ Isolated development project for the approved 18-page Tribune Bangla redesign.
 - Supabase client configuration using a publishable key only.
 - Phone + password signup/login UI (OTP-free signup requires Phone confirmations disabled in Supabase Auth settings).
 - Premium responsive homepage with lead-story grid, latest-news sections, category navigation, public published-news listing, category pages, article pages, video and e-paper sections, and search.
-- Reader profile, private saved-news library with save/remove actions, and reporter application form.
+- Reader profile, private saved-news library with save/remove actions, notification center for reporter-application and article-publication updates, and reporter application form.
 - Reporter dashboard and draft/pending article submission.
 - Admin news editing, category CRUD, video/e-paper publishing, role-aware deletion and editor publication controls.
 - Secret-protected auto-news ingestion endpoint that can only enqueue pending items, plus review and server-side approval-and-publish RPC.
