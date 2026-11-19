@@ -31,9 +31,8 @@ function table(rows,allowDelete=true){if(!rows.length)return empty();return '<di
 async function render(r){
  if(!db)return h("সংযোগ কনফিগারেশন প্রয়োজন")+msg("Supabase public config.js পাওয়া যায়নি।","error");
  if(r.id==="home"){
-  const [ns,cs,popular,countryResult]=await Promise.all([
+  const [ns,popular,countryResult]=await Promise.all([
    newsList({public:true,limit:18}),
-   categories(),
    newsList({public:true,popular:true,limit:5}),
    db.from("categories").select("id").eq("slug","country").maybeSingle()
   ]);
