@@ -32,6 +32,8 @@ assert.match(app,/if\(id===\"auto-edit-form\"\)/);
 assert.match(app,/source_type==="auto"/);
 assert.match(app,/reporter_code/);
 assert.match(app,/saved_news/);
+assert.ok(app.includes('if(r.id==="savedNews"){'),"Saved-news page route must be implemented");
+assert.match(app,/select\("id,created_at,news\(/);
 assert.match(app,/toggle-save-news/);
 assert.match(app,/mark-all-notifications-read/);
 assert.match(app,/get_admin_dashboard_stats/);
