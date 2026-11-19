@@ -5,6 +5,14 @@
       "destination": "/api/share?slug=:slug"
     },
     {
+      "source": "/login",
+      "destination": "/login.html"
+    },
+    {
+      "source": "/login/",
+      "destination": "/login.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
