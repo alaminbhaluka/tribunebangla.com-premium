@@ -21,7 +21,7 @@ async function newsList(opts={}){let q=db.from("news").select("id,title,slug,exc
 function card(n){return '<article class="card">'+(n.featured_image?'<img src="'+esc(n.featured_image)+'" alt="'+esc(n.image_alt||n.title)+'" loading="lazy">':'<div class="placeholder"></div>')+'<div class="card-body"><span class="kicker">'+esc(n.categories?.name||"সংবাদ")+'</span><h2><a href="/post/'+encodeURIComponent(n.slug)+'">'+esc(n.title)+'</a></h2><p class="muted">'+esc(n.excerpt||"")+'</p><small class="muted">'+esc(date(n.published_at))+'</small></div></article>';}
 function hotCard(n){return '<article class="akh-hot-card"><a href="/post/'+encodeURIComponent(n.slug)+'">'+(n.featured_image?'<img src="'+esc(n.featured_image)+'" alt="'+esc(n.image_alt||n.title)+'" loading="lazy">':'<div class="placeholder"></div>')+'</a><h3><a href="/post/'+encodeURIComponent(n.slug)+'">'+esc(n.title)+'</a></h3></article>';}
 function heroStory(n){return '<article class="akh-hero-story"><a class="akh-hero-image" href="/post/'+encodeURIComponent(n.slug)+'">'+(n.featured_image?'<img src="'+esc(n.featured_image)+'" alt="'+esc(n.image_alt||n.title)+'">':'<div class="placeholder"></div>')+'</a><div class="akh-hero-copy"><span class="kicker">'+esc(n.categories?.name||"শীর্ষ সংবাদ")+'</span><h1><a href="/post/'+encodeURIComponent(n.slug)+'">'+esc(n.title)+'</a></h1><p>'+esc(n.excerpt||"")+'</p><small class="muted">'+esc(date(n.published_at))+'</small></div></article>';}
-function sidebarMarkup(latest=[],popular=[]){const list=rows=>rows.length?'<ol>'+rows.map(n=>'<li><a href="/post/'+encodeURIComponent(n.slug)+'">'+esc(n.title)+'</a></li>').join("")+'</ol>':empty("এখনো সংবাদ নেই");return '<aside class="akh-sidebar"><div class="akh-ad-slot">বিজ্ঞাপন</div><section class="akh-side-block"><h2>সর্বশেষ - সারাদেশ</h2>'+list(latest)+'</section><div class="akh-ad-slot">বিজ্ঞাপন</div><section class="akh-side-block"><h2>সর্বাধিক পঠিত - সারাদেশ</h2>'+list(popular)+'</section></aside>';}
+function sidebarMarkup(latest=[],popular=[],latestTitle="সর্বশেষ সংবাদ",popularTitle="সর্বাধিক পঠিত"){const list=rows=>rows.length?'<ol>'+rows.map(n=>'<li><a href="/post/'+encodeURIComponent(n.slug)+'">'+esc(n.title)+'</a></li>').join("")+'</ol>':empty("এখনো সংবাদ নেই");return '<aside class="akh-sidebar"><div class="akh-ad-slot">বিজ্ঞাপন</div><section class="akh-side-block"><h2>'+esc(latestTitle)+'</h2>'+list(latest)+'</section><div class="akh-ad-slot">বিজ্ঞাপন</div><section class="akh-side-block"><h2>'+esc(popularTitle)+'</h2>'+list(popular)+'</section></aside>';}
 
 const empty=s=>'<div class="empty"><b>'+esc(s||"কোনো সংবাদ পাওয়া যায়নি")+'</b><p>অনুমোদিত সংবাদ প্রকাশিত হলে এখানে দেখা যাবে।</p></div>';
 async function authForm(signup){return h(signup?"পাঠক নিবন্ধন":"অ্যাকাউন্টে প্রবেশ")+'<section class="formpanel"><form id="auth-form" class="formgrid">'+(signup?field("পূর্ণ নাম","display_name"):"")+field("মোবাইল নম্বর অথবা ইমেইল","identifier")+field("পাসওয়ার্ড (কমপক্ষে ৮ অক্ষর)","password","password")+(signup?field("পাসওয়ার্ড আবার লিখুন","password2","password"):"")+'<div><button class="btn">'+(signup?"নিবন্ধন করুন":"লগইন")+'</button></div></form><p class="muted">'+(signup?'আগে নিবন্ধন করেছেন? <a href="/login">লগইন</a>':'নতুন পাঠক? <a href="/register">নিবন্ধন করুন</a>')+'</p><p class="muted">OTP ছাড়া মোবাইল-পাসওয়ার্ড নিবন্ধনের জন্য Supabase Auth-এ Phone confirmations বন্ধ থাকতে হবে।</p><div id="form-message"></div></section>';}
@@ -31,16 +31,16 @@ function table(rows,allowDelete=true){if(!rows.length)return empty();return '<di
 async function render(r){
  if(!db)return h("সংযোগ কনফিগারেশন প্রয়োজন")+msg("Supabase public config.js পাওয়া যায়নি।","error");
  if(r.id==="home"){
-  const [ns,popular,countryResult]=await Promise.all([
+  const [ns,popularAll,countryResult]=await Promise.all([
    newsList({public:true,limit:18}),
    newsList({public:true,popular:true,limit:5}),
    db.from("categories").select("id").eq("slug","country").maybeSingle()
   ]);
-  const countryLatest=countryResult.data?await newsList({public:true,category:countryResult.data.id,limit:5}):ns.slice(0,5);
-  const hot=popular.some(x=>Number(x.view_count)>0)?popular:ns.slice(0,5);
+  const [countryLatest,popular]=countryResult.data?await Promise.all([newsList({public:true,category:countryResult.data.id,limit:5}),newsList({public:true,popular:true,category:countryResult.data.id,limit:5})]):[ns.slice(0,5),popularAll];
+  const hot=popular.some(x=>Number(x.view_count)>0)?popular:countryLatest;
   const hero=ns[0],rest=ns.slice(1,7);
   return '<section class="akh-hot"><h2>জ্বলছে / আলোচিত খবর</h2><div class="akh-hot-grid">'+hot.map(hotCard).join("")+'</div></section>'+
-   (hero?'<section class="akh-main-grid"><div class="akh-main-column">'+heroStory(hero)+'<div class="akh-story-grid">'+rest.map(card).join("")+'</div></div>'+sidebarMarkup(countryLatest,popular)+'</section>':empty("এখনো কোনো অনুমোদিত সংবাদ প্রকাশিত হয়নি"));
+   (hero?'<section class="akh-main-grid"><div class="akh-main-column">'+heroStory(hero)+'<div class="akh-story-grid">'+rest.map(card).join("")+'</div></div>'+sidebarMarkup(countryLatest,popular,"সর্বশেষ - সারাদেশ","সর্বাধিক পঠিত - সারাদেশ")+'</section>':empty("এখনো কোনো অনুমোদিত সংবাদ প্রকাশিত হয়নি"));
  }
  if(r.id==="category"){const {data:c}=await db.from("categories").select("id,name").eq("slug",r.p[0]).eq("is_active",true).maybeSingle();if(!c)return h("বিভাগ পাওয়া যায়নি")+empty();const ns=await newsList({public:true,category:c.id});return h(c.name)+(ns.length?'<div class="cards">'+ns.map(card).join("")+'</div>':empty());}
  if(r.id==="article"){
