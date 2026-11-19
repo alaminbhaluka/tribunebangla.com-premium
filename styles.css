@@ -95,8 +95,8 @@ footer .footer p{color:#ddd}
 /* Super-admin controlled header, navigation, footer and theme */
 .masthead{background:var(--design-header-bg,#fff);color:var(--design-header-text,var(--ink));}
 .masthead .actions a{color:var(--design-header-text,var(--ink));}
-.nav{background:var(--design-nav-bg,#fff);color:var(--design-nav-text,var(--ink));}
-.nav a{color:var(--design-nav-text,var(--ink));}
+.nav{background:var(--design-nav-bg,#c90000);color:var(--design-nav-text,#fff);}
+.nav a{color:var(--design-nav-text,#fff);}
 .nav a[aria-current=page]{color:var(--design-accent,var(--red));border-bottom-color:var(--design-accent,var(--red));}
 footer{background:var(--design-footer-bg,#151b23);color:var(--design-footer-text,#d8dee7);}
 footer .footer p,footer .footerlinks a,footer .copyright{color:var(--design-footer-text,#d8dee7);}
