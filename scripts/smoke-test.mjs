@@ -13,9 +13,9 @@ const ingestion=readFileSync(new URL("../supabase/functions/ingest-news/index.ts
 const functionConfig=readFileSync(new URL("../supabase/config.toml",import.meta.url),"utf8");
 const reporterCodes=readFileSync(new URL("../supabase/migrations/20261118235355_reporter_unique_codes.sql",import.meta.url),"utf8");
 const savedNews=readFileSync(new URL("../supabase/migrations/20261118235846_reader_saved_news.sql",import.meta.url),"utf8");
-const notifications=readFileSync(new URL("../supabase/migrations/20261119013000_user_notifications.sql",import.meta.url),"utf8");
-const dashboardStats=readFileSync(new URL("../supabase/migrations/20261119014000_admin_dashboard_stats.sql",import.meta.url),"utf8");
-const viewCounter=readFileSync(new URL("../supabase/migrations/20261119015000_increment_news_view.sql",import.meta.url),"utf8");
+const notifications=readFileSync(new URL("../supabase/migrations/20261119000837_user_notifications.sql",import.meta.url),"utf8");
+const dashboardStats=readFileSync(new URL("../supabase/migrations/20261119001050_admin_dashboard_stats.sql",import.meta.url),"utf8");
+const viewCounter=readFileSync(new URL("../supabase/migrations/20261119001500_increment_news_view.sql",import.meta.url),"utf8");
 const ids=["home","category","article","search","savedNews","notifications","login","register","account","reporter","reporterProfile","admin","news","categories","videosAdmin","epapersAdmin","auto","applications","users","video","epaper","contact","about","privacy"];
 assert.match(html,/<html lang="bn">/);
 assert.match(html,/type="module" src="\/app.js"/);
