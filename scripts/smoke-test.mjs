@@ -92,3 +92,11 @@ assert.match(media,/create table if not exists public.video_posts/);
 assert.match(media,/create table if not exists public.epapers/);
 assert.doesNotMatch(ingestion,/status: "published"/);
 console.log("TribuneBangla smoke tests passed: route set, Supabase auth, moderation, role APIs, media bucket, responsive layout and security headers.");
+
+assert.match(app,/data-brand-upload=/);
+assert.match(app,/uploadBrandImage/);
+assert.match(app,/image\/gif/);
+assert.match(app,/image\/webp/);
+assert.match(app,/brandSrc/);
+assert.match(css,/brand-upload-preview/);
+console.log("Branding upload checks passed: four independent slots, image preview, GIF support and optimized WebP upload.");
