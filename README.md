@@ -12,7 +12,7 @@ Isolated development project for the approved 18-page Tribune Bangla redesign.
 - Responsive Bengali news portal shell and 18 page families.
 - Supabase client configuration using a publishable key only.
 - Phone + password signup/login UI (OTP-free signup requires Phone confirmations disabled in Supabase Auth settings).
-- Premium responsive homepage with lead-story grid, latest-news sections, category navigation, public published-news listing, category pages, article pages, video and e-paper sections, and search.
+- Araler Khobor reference-matched Tribune Bangla homepage with a red trending-news band, lead-story layout, country/latest/popular sidebar, related-story article layout, and category navigation, public published-news listing, category pages, article pages, video and e-paper sections, and search.
 - Reader profile, private saved-news library with save/remove actions, notification center for reporter-application and article-publication updates, and reporter application form.
 - Reporter dashboard and draft/pending article submission.
 - Admin news editing, category CRUD, video/e-paper publishing, role-aware deletion and editor publication controls.
@@ -22,7 +22,7 @@ Isolated development project for the approved 18-page Tribune Bangla redesign.
 - Site branding settings for wordmark and favicon URLs.
 - Super-admin-only account role listing and delegated-role changes.
 - Public news-media storage bucket with restricted editor upload policies.
-- Server-rendered Open Graph and Twitter metadata for article links, including Bengali-slug support and Vercel preview canonical URLs.
+- Server-rendered Open Graph and Twitter metadata for article links, including Bengali-slug support and Vercel preview canonical URLs; public article view counts power popular-news sections.
 - Audit records for privileged auto-news, reporter review and role changes.
 - CI smoke tests and security headers.
 
