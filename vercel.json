@@ -43,7 +43,7 @@
   "crons": [
     {
       "path": "/api/auto-news",
-      "schedule": "*/15 * * * *"
+      "schedule": "0 2 * * *"
     }
   ]
 }
