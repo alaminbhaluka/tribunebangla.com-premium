@@ -5,7 +5,38 @@
 <meta property="og:site_name" content="ট্রিবিউন বাংলা"><meta property="og:type" content="website"><meta property="og:title" content="ট্রিবিউন বাংলা | সত্য ও ন্যায়ের পক্ষে"><meta property="og:description" content="সত্য ও ন্যায়ের পক্ষে, মানুষের কথা তুলে ধরাই আমাদের অঙ্গীকার।">
 <title>ট্রিবিউন বাংলা | সত্য ও ন্যায়ের পক্ষে</title>
 <link rel="icon" href="/assets/tribune-mark.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/tribune-mark.svg"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="/styles.css">
-<script src="/config.js"></script><script type="module" src="/app.js"></script>
+<script src="/config.js"></script><script>
+(function(){
+  function reportBootFailure(reason){
+    var root=document.getElementById("app");
+    if(!root) return;
+    var loading=root.querySelector(".loading");
+    if(!loading) return;
+    var detail=String(reason||"অজানা JavaScript ত্রুটি").slice(0,240);
+    console.error("[Tribune Bangla boot error]",reason);
+    var box=document.createElement("section");
+    box.className="notice error";
+    box.setAttribute("role","alert");
+    var heading=document.createElement("strong");
+    heading.textContent="ওয়েবসাইট চালু হতে সমস্যা হয়েছে।";
+    var message=document.createElement("p");
+    message.textContent="পেজটি লোড করা যায়নি। নিচের ত্রুটির তথ্যটি সাপোর্টে পাঠান: "+detail;
+    box.appendChild(heading);
+    box.appendChild(message);
+    root.replaceChildren(box);
+  }
+  window.addEventListener("error",function(event){
+    var target=event.target;
+    var detail=event.message || (target && target.src ? "স্ক্রিপ্ট লোড হয়নি: "+target.src : "JavaScript চালু হতে পারেনি");
+    reportBootFailure(detail);
+  },true);
+  window.addEventListener("unhandledrejection",function(event){
+    var reason=event.reason;
+    reportBootFailure(reason && (reason.stack || reason.message) || reason);
+  });
+})();
+</script>
+<script type="module" src="/app.js"></script>
 </head><body>
 <div class="ad-top"><div class="container">বিজ্ঞাপন | আপনার প্রতিষ্ঠানের প্রচার করুন</div></div><div class="utility"><div class="container"><span id="today-date">বৃহস্পতিবার, ১৯ নভেম্বর ২০২৬</span><span>ঢাকা | বাংলাদেশ</span></div></div>
 <header class="container masthead"><div class="masthead-side"></div><a class="brand" href="/" aria-label="ট্রিবিউন বাংলা"><img src="/assets/tribune-mark.svg" alt=""><img class="wordmark" src="/assets/tribune-wordmark.svg" alt="ট্রিবিউন বাংলা"></a><div class="masthead-tools"><div class="actions"><a href="/search">⌕ অনুসন্ধান</a><a class="login" id="account-link" href="/login">লগইন</a></div><div class="social-links"><a data-social="facebook" hidden target="_blank" rel="noopener noreferrer">f</a><a data-social="youtube" hidden target="_blank" rel="noopener noreferrer">▶</a></div></div></header>
