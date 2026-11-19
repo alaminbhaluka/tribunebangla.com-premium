@@ -12,6 +12,7 @@ const media=readFileSync(new URL("../supabase/migrations/20261118220732_media_se
 const ingestion=readFileSync(new URL("../supabase/functions/ingest-news/index.ts",import.meta.url),"utf8");
 const functionConfig=readFileSync(new URL("../supabase/config.toml",import.meta.url),"utf8");
 const reporterCodes=readFileSync(new URL("../supabase/migrations/20261118235355_reporter_unique_codes.sql",import.meta.url),"utf8");
+const savedNews=readFileSync(new URL("../supabase/migrations/20261118235846_reader_saved_news.sql",import.meta.url),"utf8");
 const ids=["home","category","article","search","savedNews","login","register","account","reporter","reporterProfile","admin","news","categories","videosAdmin","epapersAdmin","auto","applications","users","video","epaper","contact","about","privacy"];
 assert.match(html,/<html lang="bn">/);
 assert.match(html,/type="module" src="\/app.js"/);
@@ -62,6 +63,8 @@ assert.match(ingestion,/status: "pending"/);
 assert.match(ingestion,/SUPABASE_SECRET_KEYS/);
 assert.match(reporterCodes,/reporter_code_seq/);
 assert.match(reporterCodes,/get_reporter_profile/);
+assert.match(savedNews,/create table if not exists public.saved_news/);
+assert.match(savedNews,/auth.uid\(\)/);
 assert.equal(ingestion.includes("\\n"), false, "Ingestion source must not contain literal escaped newlines");
 assert.match(functionConfig,/verify_jwt = false/);
 assert.match(app,/video_posts/);
