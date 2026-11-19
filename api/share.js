@@ -2,11 +2,12 @@ const fallbackUrl = "https://tdyrxdnqyuebtzhjuprh.supabase.co";
 const fallbackKey = "sb_publishable___JNcLdKcXvRSSdP6ZoA7A_mVDD2phD";
 const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const siteOrigin = () => {
-  const candidate = process.env.PUBLIC_SITE_URL || "https://preview.tribunebangla.com";
+  const candidate = process.env.PUBLIC_SITE_URL || (process.env.VERCEL_URL ? "https://" + process.env.VERCEL_URL : "https://preview.tribunebangla.com");
   try {
     const parsed = new URL(candidate);
     const allowed = new Set(["tribunebangla.com", "www.tribunebangla.com", "preview.tribunebangla.com"]);
-    if (parsed.protocol !== "https:" || !allowed.has(parsed.hostname)) return "https://preview.tribunebangla.com";
+    const vercelPreview = /^[a-z0-9.-]+\.vercel\.app$/i.test(parsed.hostname);
+    if (parsed.protocol !== "https:" || parsed.username || parsed.password || (!allowed.has(parsed.hostname) && !vercelPreview)) return "https://preview.tribunebangla.com";
     return parsed.origin;
   } catch (_) {
     return "https://preview.tribunebangla.com";
@@ -27,7 +28,7 @@ module.exports = async function handler(req,res) {
   const url = process.env.SUPABASE_URL || fallbackUrl;
   const key = process.env.SUPABASE_PUBLISHABLE_KEY || fallbackKey;
   let article = null;
-  if (slug && /^[\\p{L}\\p{N}-]+$/u.test(slug)) {
+  if (slug && /^[\p{L}\p{N}-]+$/u.test(slug)) {
     try {
       const endpoint = new URL("/rest/v1/news", url);
       endpoint.searchParams.set("select","title,slug,excerpt,featured_image,seo_title,seo_description,published_at,categories(name)");
