@@ -80,3 +80,6 @@ footer .footer p{color:#ddd}
 @media(max-width:440px){.masthead .brand .wordmark{width:min(180px,calc(100vw - 145px))}.actions a:first-child{display:none}.akh-hot-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.akh-hot-card img,.akh-hot-card .placeholder{height:92px}.akh-story-grid{grid-template-columns:1fr}.akh-hero-copy h1{font-size:23px}}
 
 .akh-related-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.akh-related-grid .card{border:1px solid var(--line)}.akh-related-grid .card>img,.akh-related-grid .placeholder{height:120px}.akh-related-grid .card-body{padding:10px}.akh-related-grid .card h2{font-size:16px;line-height:1.4}@media(max-width:440px){.akh-related-grid{grid-template-columns:1fr}}
+
+/* Newspaper article body: justified paragraph alignment */
+.akh-article-layout .article .article-body{text-align:justify;text-justify:inter-word;}
