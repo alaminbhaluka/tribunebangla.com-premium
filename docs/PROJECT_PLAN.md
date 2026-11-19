@@ -21,6 +21,8 @@
 - [x] Supabase project, 8 initial RLS-enabled tables, and super-admin account.
 - [x] Public news, category and article queries with the premium lead-story homepage layout.
 - [x] Reader saved-news library with owner-only RLS and save/remove actions.
+- [x] Reader/reporter notification center with automatic application and article-status alerts.
+- [x] Role-scoped admin dashboard statistics through a security-definer RPC.
 - [x] Bengali article social-preview slug handling and Vercel preview canonical URL support.
 - [x] Reader phone/password auth UI; confirmation setting still needs dashboard configuration.
 - [x] Reporter application and approval RPC.
