@@ -83,3 +83,10 @@ footer .footer p{color:#ddd}
 
 /* Newspaper article body: justified paragraph alignment */
 .akh-article-layout .article .article-body{text-align:justify;text-justify:inter-word;}
+
+
+/* Newspaper article drop cap and clickable source credit */
+.akh-article-layout .article .article-body::first-letter{float:left;font-size:3.65em;line-height:.82;padding:.08em .12em 0 0;color:var(--red);font-weight:800;}
+.akh-article-layout .article .article-source{margin:26px 0 34px;padding:13px 16px;border-left:3px solid var(--red);background:#f7f7f7;color:#555;font-size:15px;}
+.akh-article-layout .article .article-source strong{color:#222;margin-right:6px;}
+.akh-article-layout .article .article-source a{color:var(--red);font-weight:700;text-decoration:underline;text-underline-offset:3px;}
