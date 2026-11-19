@@ -15,6 +15,7 @@ const reporterCodes=readFileSync(new URL("../supabase/migrations/20261118235355_
 const savedNews=readFileSync(new URL("../supabase/migrations/20261118235846_reader_saved_news.sql",import.meta.url),"utf8");
 const notifications=readFileSync(new URL("../supabase/migrations/20261119013000_user_notifications.sql",import.meta.url),"utf8");
 const dashboardStats=readFileSync(new URL("../supabase/migrations/20261119014000_admin_dashboard_stats.sql",import.meta.url),"utf8");
+const viewCounter=readFileSync(new URL("../supabase/migrations/20261119015000_increment_news_view.sql",import.meta.url),"utf8");
 const ids=["home","category","article","search","savedNews","notifications","login","register","account","reporter","reporterProfile","admin","news","categories","videosAdmin","epapersAdmin","auto","applications","users","video","epaper","contact","about","privacy"];
 assert.match(html,/<html lang="bn">/);
 assert.match(html,/type="module" src="\/app.js"/);
@@ -34,7 +35,10 @@ assert.match(app,/saved_news/);
 assert.match(app,/toggle-save-news/);
 assert.match(app,/mark-all-notifications-read/);
 assert.match(app,/get_admin_dashboard_stats/);
-assert.match(app,/lead-side/);
+assert.match(app,/akh-hot/);
+assert.match(app,/akh-main-grid/);
+assert.match(app,/increment_news_view/);
+assert.match(app,/view_count/);
 assert.match(app,/category-form/);
 assert.match(app,/set_user_role/);
 assert.match(app,/news-media/);
@@ -73,6 +77,7 @@ assert.match(notifications,/create table if not exists public.user_notifications
 assert.match(notifications,/notify_reporter_application_status/);
 assert.match(notifications,/notify_news_author_status/);
 assert.match(dashboardStats,/get_admin_dashboard_stats/);
+assert.match(viewCounter,/increment_news_view/);
 assert.equal(ingestion.includes("\\n"), false, "Ingestion source must not contain literal escaped newlines");
 assert.match(functionConfig,/verify_jwt = false/);
 assert.match(app,/video_posts/);
