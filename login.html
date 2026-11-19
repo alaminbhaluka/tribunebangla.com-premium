@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#c90000"><title>লগইন | Tribune Bangla</title>
+<link rel="stylesheet" href="/styles.css"><script src="/config.js"></script>
+<style>
+.login-wrap{max-width:560px;margin:38px auto 56px;padding:0 16px}
+.login-card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:clamp(20px,5vw,36px);box-shadow:0 8px 28px rgba(0,0,0,.06)}
+.login-card h1{font-size:28px;margin:0 0 6px}.login-card .field{margin:16px 0}
+.login-card input{width:100%;padding:13px;border:1px solid #d8dde4;border-radius:7px;font:inherit}
+.login-card button{width:100%;margin-top:10px}.login-brand{display:flex;justify-content:center;align-items:center;gap:10px;margin:24px 0 4px}
+.login-brand img:first-child{width:42px;height:42px}.login-brand img:last-child{width:min(230px,55vw)}
+.login-error{display:none;margin-top:14px}.login-error.show{display:block}
+</style>
+</head>
+<body>
+<div class="ad-top"><div class="container">বিজ্ঞাপন | আপনার প্রতিষ্ঠানের প্রচার করুন</div></div>
+<div class="login-wrap">
+<a class="login-brand" href="/"><img src="/assets/tribune-mark.svg" alt=""><img src="/assets/tribune-wordmark.svg" alt="ট্রিবিউন বাংলা"></a>
+<section class="login-card">
+<h1>অ্যাকাউন্টে প্রবেশ</h1><p class="muted">মোবাইল নম্বর অথবা ইমেইল এবং পাসওয়ার্ড দিয়ে লগইন করুন।</p>
+<form id="login-form">
+<label class="field">মোবাইল নম্বর অথবা ইমেইল<input name="identifier" type="text" autocomplete="username" placeholder="01XXXXXXXXX অথবা email@example.com" required></label>
+<label class="field">পাসওয়ার্ড<input name="password" type="password" autocomplete="current-password" placeholder="আপনার পাসওয়ার্ড" required minlength="8"></label>
+<button class="btn" id="login-submit" type="submit">লগইন করুন</button>
+</form>
+<div id="login-error" class="notice error login-error" role="alert"></div>
+<p class="muted">নতুন পাঠক? <a href="/register">নিবন্ধন করুন</a></p>
+<a href="/" class="muted">← হোম পেইজে ফিরে যান</a>
+</section></div>
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
+const cfg=window.TRIBUNE_CONFIG||{};
+const form=document.getElementById("login-form");
+const button=document.getElementById("login-submit");
+const errorBox=document.getElementById("login-error");
+const showError=(message)=>{errorBox.textContent=message;errorBox.classList.add("show");};
+const phone=(value)=>{let n=String(value||"").replace(/[\\s()-]/g,"");if(n.startsWith("01")&&n.length===11)n="+88"+n;else if(n.startsWith("880"))n="+"+n;return n;};
+form.addEventListener("submit",async(event)=>{
+ event.preventDefault();errorBox.classList.remove("show");
+ if(!cfg.supabaseUrl||!cfg.supabasePublishableKey){showError("লগইন সার্ভারের কনফিগারেশন পাওয়া যায়নি।");return;}
+ const values=new FormData(form),identifier=String(values.get("identifier")||"").trim(),password=String(values.get("password")||"");
+ if(!identifier||password.length<8){showError("সঠিক মোবাইল/ইমেইল এবং কমপক্ষে ৮ অক্ষরের পাসওয়ার্ড দিন।");return;}
+ button.disabled=true;button.textContent="অপেক্ষা করুন…";
+ try{
+  const db=createClient(cfg.supabaseUrl,cfg.supabasePublishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  const credentials=identifier.includes("@")?{email:identifier,password}:{phone:phone(identifier),password};
+  const {data,error}=await db.auth.signInWithPassword(credentials);
+  if(error)throw error;
+  const role=data.user?.app_metadata?.role||"reader";
+  location.replace(["super_admin","admin","editor","auto_news_admin","reporter_admin"].includes(role)?"/admin":role==="reporter"?"/reporter/dashboard":"/account");
+ }catch(error){showError(error?.message||"লগইন করা যায়নি। তথ্য যাচাই করে আবার চেষ্টা করুন。");}
+ finally{button.disabled=false;button.textContent="লগইন করুন";}
+});
+</script>
+</body></html>
