@@ -285,3 +285,13 @@ footer[data-layout=stacked] .footer{flex-direction:column;align-items:flex-start
  .home-category-list .news-mini-thumb,.home-category-list .news-mini-thumb img{width:96px;height:72px}
  .home-category-list .news-mini h3{font-size:14px}
 }
+
+
+/* Sidebar lists: popular and latest headlines */
+.home-sidebar-latest{min-width:0}
+.home-sidebar-latest .home-rank-story{padding:8px 0}
+.home-sidebar-latest .home-rank-story>a{font-size:13px;line-height:1.55}
+.home-sidebar-latest .home-rank-story>b{color:#b90000;background:#f7eeee}
+@media(max-width:620px){
+ .home-sidebar-latest .home-rank-story>a{font-size:14px}
+}
