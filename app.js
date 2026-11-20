@@ -3,6 +3,31 @@ const cfg=window.TRIBUNE_CONFIG||{}, ready=!!(cfg.supabaseUrl&&cfg.supabasePubli
 const db=ready?createClient(cfg.supabaseUrl,cfg.supabasePublishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}):null;
 const app=document.getElementById("app");let user=null,role="reader";
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function renderArticleBody(value){
+ const raw=String(value??"").trim();
+ if(!raw)return "";
+ if(!/<[a-z][^>]*>/i.test(raw))return esc(raw).replace(/\\r?\\n/g,"<br>");
+ const doc=new DOMParser().parseFromString(raw,"text/html");
+ const allowed=new Set(["p","br","strong","b","em","i","ul","ol","li","blockquote","h2","h3","hr","a"]);
+ const blocked=new Set(["script","style","iframe","object","embed","svg","math","template"]);
+ const clean=node=>{
+  if(node.nodeType===3)return esc(node.nodeValue||"");
+  if(node.nodeType!==1)return "";
+  const tag=node.tagName.toLowerCase();
+  if(blocked.has(tag))return "";
+  const inner=[...node.childNodes].map(clean).join("");
+  if(!allowed.has(tag))return inner;
+  if(tag==="br"||tag==="hr")return "<"+tag+">";
+  if(tag==="a"){
+   const href=node.getAttribute("href")||"";
+   try{const u=new URL(href,location.origin);if(["http:","https:"].includes(u.protocol))return '<a href="'+esc(u.href)+'" target="_blank" rel="noopener noreferrer">'+inner+"</a>";}catch{}
+   return inner;
+  }
+  return "<"+tag+">"+inner+"</"+tag+">";
+ };
+ return [...doc.body.childNodes].map(clean).join("");
+}
 const msg=(s,k="info")=>'<p class="notice '+k+'" role="status">'+esc(s)+'</p>';
 const h=s=>'<header class="heading"><div><span class="eyebrow">TRIBUNE BANGLA</span><h1>'+esc(s)+'</h1></div></header>';
 const field=(label,name,type="text",value="")=>'<label class="field">'+esc(label)+'<input name="'+name+'" type="'+type+'" required value="'+esc(value)+'"></label>';
@@ -54,7 +79,7 @@ async function render(r){
   document.title=n.seo_title||n.title+" | ট্রিবিউন বাংলা";
   document.querySelector('meta[name="description"]')?.setAttribute("content",n.seo_description||n.excerpt||n.title);
   const shareUrl=location.origin+"/post/"+encodeURIComponent(n.slug);
-  return '<div class="akh-article-layout"><article class="article"><div class="crumb"><a href="/">প্রচ্ছদ</a> / '+esc(n.categories?.name||"সংবাদ")+'</div><span class="kicker">'+esc(n.categories?.name||"সংবাদ")+'</span><h1>'+esc(n.title)+'</h1><p class="muted">প্রকাশ: '+esc(date(n.published_at))+'</p><div class="article-actions"><button class="btn" data-action="share">শেয়ার করুন</button> <button class="btn secondary" data-action="copy">লিংক কপি</button> '+(user?'<button class="btn secondary" data-action="toggle-save-news" data-id="'+n.id+'" data-saved="'+(saved?"true":"false")+'">'+(saved?"সংরক্ষিত থেকে সরান":"সংবাদ সংরক্ষণ")+'</button>':'<a class="btn secondary" href="/login">লগইন করে সংরক্ষণ</a>')+' <a class="share-link" target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(shareUrl)+'">Facebook</a> <a class="share-link" target="_blank" rel="noopener noreferrer" href="https://wa.me/?text='+encodeURIComponent(n.title+" "+shareUrl)+'">WhatsApp</a></div><div class="akh-ad-banner">বিজ্ঞাপন</div>'+(n.featured_image?'<img class="article-image" src="'+esc(n.featured_image)+'" alt="'+esc(n.image_alt||n.title)+'">':'<div class="placeholder article-placeholder"></div>')+'<p class="excerpt">'+esc(n.excerpt||"")+'</p><div class="article-body">'+esc(n.body).replace(/\\n/g,"<br>")+'</div>'+((n.source_url||n.source_name)?'<div class="article-source"><strong>সংবাদের সূত্র:</strong> '+(/^https?:\/\//.test(n.source_url||"")?'<a href="'+esc(n.source_url)+'" target="_blank" rel="noopener noreferrer">'+esc(n.source_name||"মূল প্রতিবেদন")+'</a>':esc(n.source_name||""))+'</div>':"")+'<section class="section"><div class="section-head"><h2>আরও পড়ুন</h2></div><div class="akh-related-grid">'+related.filter(x=>x.id!==n.id).slice(0,4).map(card).join("")+'</div></section></article>'+sidebarMarkup(latest,popular)+'</div>';
+  return '<div class="akh-article-layout"><article class="article"><div class="crumb"><a href="/">প্রচ্ছদ</a> / '+esc(n.categories?.name||"সংবাদ")+'</div><span class="kicker">'+esc(n.categories?.name||"সংবাদ")+'</span><h1>'+esc(n.title)+'</h1><p class="muted">প্রকাশ: '+esc(date(n.published_at))+'</p><div class="article-actions"><button class="btn" data-action="share">শেয়ার করুন</button> <button class="btn secondary" data-action="copy">লিংক কপি</button> '+(user?'<button class="btn secondary" data-action="toggle-save-news" data-id="'+n.id+'" data-saved="'+(saved?"true":"false")+'">'+(saved?"সংরক্ষিত থেকে সরান":"সংবাদ সংরক্ষণ")+'</button>':'<a class="btn secondary" href="/login">লগইন করে সংরক্ষণ</a>')+' <a class="share-link" target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(shareUrl)+'">Facebook</a> <a class="share-link" target="_blank" rel="noopener noreferrer" href="https://wa.me/?text='+encodeURIComponent(n.title+" "+shareUrl)+'">WhatsApp</a></div><div class="akh-ad-banner">বিজ্ঞাপন</div>'+(n.featured_image?'<img class="article-image" src="'+esc(n.featured_image)+'" alt="'+esc(n.image_alt||n.title)+'">':'<div class="placeholder article-placeholder"></div>')+'<p class="excerpt">'+esc(n.excerpt||"")+'</p><div class="article-body">'+renderArticleBody(n.body||n.excerpt)+'</div>'+((n.source_url||n.source_name)?'<div class="article-source"><strong>সংবাদের সূত্র:</strong> '+(/^https?:\/\//.test(n.source_url||"")?'<a href="'+esc(n.source_url)+'" target="_blank" rel="noopener noreferrer">'+esc(n.source_name||"মূল প্রতিবেদন")+'</a>':esc(n.source_name||""))+'</div>':"")+'<section class="section"><div class="section-head"><h2>আরও পড়ুন</h2></div><div class="akh-related-grid">'+related.filter(x=>x.id!==n.id).slice(0,4).map(card).join("")+'</div></section></article>'+sidebarMarkup(latest,popular)+'</div>';
  }
  if(r.id==="login"||r.id==="register")return authForm(r.id==="register");
  if(r.id==="search")return h("সংবাদ অনুসন্ধান")+'<form id="search-form" class="formpanel">'+field("শিরোনাম বা বিষয় লিখুন","q","search")+'<button class="btn">খুঁজুন</button></form><div id="search-results"></div>';
