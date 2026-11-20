@@ -28,7 +28,7 @@ Isolated development project for the approved 18-page Tribune Bangla redesign.
 - Reporter application review, role assignment, and unique five-digit reporter IDs
 - Admin editing/deletion for pending auto-news queue items; published auto-news remains in the unified news list
 - Site branding settings for wordmark and favicon URLs.
-- Super-admin-only account role listing and delegated-role changes.
+- Super-admin-only account role listing, delegated-role changes, and secure email-based staff invitations with server-assigned app roles.
 - Public news-media storage bucket with restricted editor upload policies.
 - Server-rendered Open Graph and Twitter metadata for article links, including Bengali-slug support and Vercel preview canonical URLs; public article view counts power popular-news sections.
 - Audit records for privileged auto-news, reporter review and role changes.
@@ -45,12 +45,11 @@ npm test
 ```
 
 ## Important release gates
-- Configure Supabase Auth Phone provider with phone confirmations disabled to meet the approved no-OTP flow.
 - Enable leaked-password protection in Supabase Auth security settings.
 - Set the preview deployment environment and verify `preview.tribunebangla.com`.
 - Verify Open Graph metadata from server-rendered responses for social link previews.
 - Run end-to-end tests with the real super-admin session, reader, reporter and delegated admin roles.
-- Configure a secure server-side invite workflow before delegating admin roles to newly created accounts.
+- Verify invitation emails, allowed redirect URLs, and assigned staff roles end-to-end before onboarding real staff.
 - Do not deploy to production until all gates pass and the owner explicitly approves.
 
 
