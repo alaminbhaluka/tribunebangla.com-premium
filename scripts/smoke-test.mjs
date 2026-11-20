@@ -39,7 +39,12 @@ assert.match(app,/select\("id,created_at,news\(/);
 assert.match(app,/toggle-save-news/);
 assert.match(app,/mark-all-notifications-read/);
 assert.match(app,/get_admin_dashboard_stats/);
-assert.match(app,/newsList\(\{public:true,limit:4\}\)/);
+assert.match(app,/newsList\(\{public:true,limit:6\}\)/,"Homepage latest strip must load six stories");
+assert.match(app,/newsList\(\{public:true,category:c\.id,limit:4\}\)/,"Each homepage category must load up to four stories");
+assert.match(app,/home-national-grid/,"National category must use the dedicated four-card grid");
+assert.match(app,/posts\.slice\(0,4\)/,"Homepage category sections must be capped at four stories");
+assert.match(css,/\.home-national-grid\{display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/,"National grid must use two columns");
+
 assert.match(app,/select\("id,name,slug"\).*is_active/);
 assert.match(app,/সর্বশেষ সংবাদ/);
 assert.match(app,/posts\.slice\(0,4\)\.map\(card\)/);
