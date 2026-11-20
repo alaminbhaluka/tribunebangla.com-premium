@@ -6,7 +6,7 @@ function siteOrigin() {
   try {
     const parsed = new URL(candidate);
     const allowed = new Set(["tribunebangla.com", "www.tribunebangla.com", "preview.tribunebangla.com"]);
-    const vercelPreview = /^[a-z0-9.-]+\\.vercel\\.app$/i.test(parsed.hostname);
+    const vercelPreview = /^[a-z0-9.-]+\.vercel\.app$/i.test(parsed.hostname);
     if (parsed.protocol !== "https:" || parsed.username || parsed.password || (!allowed.has(parsed.hostname) && !vercelPreview)) return "https://preview.tribunebangla.com";
     return parsed.origin;
   } catch (_) {
@@ -44,7 +44,7 @@ module.exports = async function handler(req, res) {
       if (!response.ok) throw new Error("Published news query failed");
       const rows = await response.json();
       for (const row of rows) {
-        if (!row.slug || !/^[\\p{L}\\p{N}-]+$/u.test(row.slug)) continue;
+        if (!row.slug || !/^[\p{L}\p{N}-]+$/u.test(row.slug)) continue;
         const item = {loc: origin + "/post/" + encodeURIComponent(row.slug)};
         const modified = row.updated_at || row.published_at;
         if (modified && Number.isFinite(Date.parse(modified))) item.lastmod = new Date(modified).toISOString();
