@@ -1,4 +1,4 @@
-# TribuneBangla — 18-Page Design Preview (2026)
+# TribuneBangla.com
 
 This repository contains only the standalone HTML preview of the approved 18-page visual redesign. The preview includes its own embedded styles and page interactions.
 
