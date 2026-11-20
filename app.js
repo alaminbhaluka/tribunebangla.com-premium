@@ -68,20 +68,26 @@ function table(rows,allowDelete=true){if(!rows.length)return empty();return '<di
 async function render(r){
  if(!db)return h("সংযোগ কনফিগারেশন প্রয়োজন")+msg("Supabase public config.js পাওয়া যায়নি।","error");
  if(r.id==="home"){
-  const [latest,catsResult]=await Promise.all([
-   newsList({public:true,limit:4}),
+  const [latest,hot,catsResult]=await Promise.all([
+   newsList({public:true,limit:10}),
+   newsList({public:true,popular:true,limit:5}),
    db.from("categories").select("id,name,slug").eq("is_active",true).order("sort_order",{ascending:true})
   ]);
   if(catsResult.error)throw catsResult.error;
   const cats=catsResult.data||[];
-  const categoryPosts=await Promise.all(cats.map(c=>newsList({public:true,category:c.id,limit:4})));
-  const latestSection='<section class="home-latest section"><div class="section-head"><h2>সর্বশেষ সংবাদ</h2><span class="home-section-note">সর্বশেষ প্রকাশিত প্রতিবেদন</span></div>'+(latest.length?'<div class="home-lead-grid"><div class="home-lead-main">'+heroStory(latest[0])+'</div><div class="home-lead-side">'+latest.slice(1,4).map(n=>'<article class="home-mini-story">'+(n.featured_image?'<a class="home-mini-image" href="/post/'+encodeURIComponent(n.slug)+'"><img src="'+esc(n.featured_image)+'" alt="'+esc(n.image_alt||n.title)+'" loading="lazy"></a>':'<div class="home-mini-image placeholder"></div>')+'<div><span class="kicker">'+esc(n.categories?.name||"সংবাদ")+'</span><h3><a href="/post/'+encodeURIComponent(n.slug)+'">'+esc(n.title)+'</a></h3><small class="muted">'+esc(date(n.published_at))+'</small></div></article>').join("")+'</div></div>':empty("এখনো কোনো অনুমোদিত সংবাদ প্রকাশিত হয়নি"))+'</section>';
+  const categoryPosts=await Promise.all(cats.map(c=>newsList({public:true,category:c.id,limit:6})));
+  const mini=(n,cls="")=>'<article class="news-mini '+cls+'">'+(n.featured_image?'<a class="news-mini-thumb" href="/post/'+encodeURIComponent(n.slug)+'"><img src="'+esc(n.featured_image)+'" alt="'+esc(n.image_alt||n.title)+'" loading="lazy"></a>':'<a class="news-mini-thumb placeholder" href="/post/'+encodeURIComponent(n.slug)+'"></a>')+'<div><span class="kicker">'+esc(n.categories?.name||"সংবাদ")+'</span><h3><a href="/post/'+encodeURIComponent(n.slug)+'">'+esc(n.title)+'</a></h3><small class="muted">'+esc(date(n.published_at))+'</small></div></article>';
+  const hotItems=(hot.length?hot:latest).slice(0,5);
+  const hotSection=hotItems.length?'<section class="home-hot"><h2>আলোচিত খবর</h2><div class="home-hot-grid">'+hotItems.map(n=>'<article class="home-hot-card"><a href="/post/'+encodeURIComponent(n.slug)+'">'+(n.featured_image?'<img src="'+esc(n.featured_image)+'" alt="'+esc(n.image_alt||n.title)+'" loading="lazy">':'<div class="placeholder"></div>')+'<h3>'+esc(n.title)+'</h3></a></article>').join("")+'</div></section>':"";
+  const lead=latest[0];
+  const leadSection=lead?'<div class="home-news-layout"><section class="home-lead-column">'+heroStory(lead)+'<div class="home-lower-grid">'+latest.slice(6,10).map(n=>mini(n)).join("")+'</div></section><section class="home-middle-column"><h2 class="home-column-title">সর্বশেষ সংবাদ</h2>'+latest.slice(1,6).map(n=>mini(n)).join("")+'</section><aside class="home-right-column"><div class="home-ad-slot">বিজ্ঞাপন</div><section class="home-popular"><h2 class="home-column-title">জনপ্রিয় সংবাদ</h2>'+(hot.length?hot.slice(0,6):latest.slice(1,7)).map((n,i)=>'<div class="home-rank-story"><b>'+String(i+1).padStart(2,"0")+'</b><a href="/post/'+encodeURIComponent(n.slug)+'">'+esc(n.title)+'</a></div>').join("")+'</section><div class="home-ad-slot home-ad-small">বিজ্ঞাপন</div></aside></div>':empty("এখনো কোনো অনুমোদিত সংবাদ প্রকাশিত হয়নি");
   const categorySections=cats.map((c,i)=>{
    const posts=categoryPosts[i]||[];
    if(!posts.length)return "";
-   return '<section class="home-category-section section"><div class="section-head"><h2>'+esc(c.name)+'</h2><a href="/category/'+encodeURIComponent(c.slug)+'">সব সংবাদ দেখুন <span aria-hidden="true">›</span></a></div><div class="home-category-cards">'+posts.slice(0,4).map(card).join("")+'</div></section>';
+   const first=posts[0];
+   return '<section class="home-category-section"><div class="home-category-head"><h2>'+esc(c.name)+'</h2><a href="/category/'+encodeURIComponent(c.slug)+'">সব সংবাদ দেখুন ›</a></div><div class="home-category-layout"><div class="home-category-feature">'+heroStory(first)+'</div><div class="home-category-list">'+posts.slice(1,5).map(n=>mini(n)).join("")+'</div></div></section>';
   }).join("");
-  return '<div class="home-editorial">'+latestSection+categorySections+'</div>';
+  return '<div class="home-editorial">'+hotSection+leadSection+categorySections+'</div>';
  }
  if(r.id==="category"){const {data:c}=await db.from("categories").select("id,name").eq("slug",r.p[0]).eq("is_active",true).maybeSingle();if(!c)return h("বিভাগ পাওয়া যায়নি")+empty();const ns=await newsList({public:true,category:c.id});return h(c.name)+(ns.length?'<div class="cards">'+ns.map(card).join("")+'</div>':empty());}
  if(r.id==="article"){
