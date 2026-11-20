@@ -127,3 +127,43 @@ footer[data-layout=stacked] .footer{flex-direction:column;align-items:flex-start
 .source-box-link:hover{filter:brightness(.9)}
 .source-box-missing{font-size:12px;color:var(--muted);font-weight:600}
 @media(max-width:560px){.akh-article-layout .article .source-box{align-items:flex-start;flex-direction:column;padding:15px}.source-box-link{width:100%}}
+
+
+/* Newspaper-style article detail page inspired by the supplied reference */
+.akh-article-layout{grid-template-columns:minmax(0,2fr) minmax(250px,.95fr);gap:24px}
+.akh-article-layout .article{min-width:0}
+.akh-article-layout .article .crumb{background:#f3f3f3;padding:9px 12px;margin:0 0 18px;color:#9a1717}
+.akh-article-layout .article .crumb a{color:#a90000}
+.akh-article-layout .article>.kicker{display:none}
+.akh-article-layout .article h1{font-size:clamp(27px,3vw,36px);line-height:1.48;font-weight:700;margin:8px 0 16px;color:#111}
+.article-byline{display:flex;align-items:center;gap:10px;padding:0 0 13px;border-bottom:1px solid #eee;color:#555}
+.article-byline .byline-mark{display:grid;place-items:center;width:34px;height:34px;flex:0 0 34px;border:2px solid var(--red);border-radius:50%;font-size:10px;font-weight:800;color:var(--red)}
+.article-byline strong{display:block;font-size:13px;color:#333}
+.article-byline small{display:block;font-size:11px;color:#888;margin-top:2px}
+.akh-article-layout .article .article-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:10px 0 14px}
+.akh-article-layout .article .article-actions .btn{font-size:12px;padding:6px 9px;border-radius:5px}
+.akh-article-layout .article .article-actions .share-link{display:inline-grid;place-items:center;width:29px;height:29px;padding:0;border-radius:5px;background:#2878b9;color:#fff;font-weight:800;font-size:15px}
+.akh-article-layout .article .article-actions .share-whatsapp{background:#18a85b}
+.akh-article-layout .article .article-figure{margin:0 0 26px;background:#f1f1f1}
+.akh-article-layout .article .article-figure .article-image{display:block;width:100%;max-height:480px;object-fit:contain;margin:0;background:#eee}
+.akh-article-layout .article .article-figure figcaption{text-align:center;padding:6px 10px;font-size:12px;color:#666}
+.akh-article-layout .article .excerpt{font-size:17px;line-height:1.9;color:#333;font-weight:600;margin:20px 0}
+.akh-article-layout .article .article-body{font-family:"Hind Siliguri",Arial,sans-serif;font-size:17px;line-height:2.05;color:#333;margin:20px 0 28px}
+.akh-article-layout .article .article-body p{margin:0 0 18px}
+.akh-article-layout .article .article-body h2,.akh-article-layout .article .article-body h3{line-height:1.5;margin:22px 0 10px}
+.akh-article-layout .article .article-body a{color:#0879a8;text-decoration:underline}
+.akh-article-layout .article .akh-ad-banner{height:44px;margin:12px 0 14px;background:#eaf2f6;color:#879ba4}
+.article-sidebar .article-side-ad{height:120px}
+.article-sidebar .akh-side-block h2{font-size:19px}
+.article-sidebar .akh-side-block ol{list-style:none;padding:0}
+.article-sidebar .article-side-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #eee}
+.article-sidebar .article-side-item>a:last-child{font-size:14px;line-height:1.55;font-weight:500}
+.article-sidebar .article-side-thumb{display:block;flex:0 0 76px}
+.article-sidebar .article-side-thumb img{display:block;width:76px;height:58px;object-fit:cover}
+@media(max-width:760px){
+ .akh-article-layout{grid-template-columns:1fr;gap:22px}
+ .akh-article-layout .article h1{font-size:27px;line-height:1.5}
+ .akh-article-layout .article .article-body{font-size:16px;line-height:1.95}
+ .article-sidebar{grid-template-columns:1fr}
+ .article-sidebar .article-side-ad{height:90px}
+}
