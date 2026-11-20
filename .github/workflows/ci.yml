@@ -20,3 +20,4 @@ jobs:
       - run: npm run check
       - run: npm test
       - run: deno check supabase/functions/ingest-news/index.ts
+      - run: deno check supabase/functions/invite-staff/index.ts
