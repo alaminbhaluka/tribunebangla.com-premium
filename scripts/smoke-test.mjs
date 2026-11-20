@@ -42,12 +42,12 @@ assert.match(app,/get_admin_dashboard_stats/);
 assert.match(app,/newsList\(\{public:true,limit:6\}\)/,"Homepage latest strip must load six stories");
 assert.match(app,/newsList\(\{public:true,category:c\.id,limit:4\}\)/,"Each homepage category must load up to four stories");
 assert.match(app,/home-national-grid/,"National category must use the dedicated four-card grid");
-assert.match(app,/posts\.slice\(0,4\)/,"Homepage category sections must be capped at four stories");
+assert.match(app,/const posts=\(categoryPosts\[i\]\|\|\[\]\)\.slice\(0,4\)/,"Homepage category sections must be capped at four stories");
 assert.match(css,/\.home-national-grid\{display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/,"National grid must use two columns");
 
 assert.match(app,/select\("id,name,slug"\).*is_active/);
 assert.match(app,/সর্বশেষ সংবাদ/);
-assert.match(app,/posts\.slice\(0,4\)\.map\(card\)/);
+assert.match(app,/posts\.slice\(1,4\)\.map\(n=>mini\(n\)\)/,"Non-national category sections must show up to three secondary stories");
 assert.match(app,/সব সংবাদ দেখুন/);
 assert.match(app,/increment_news_view/);
 assert.match(app,/view_count/);
