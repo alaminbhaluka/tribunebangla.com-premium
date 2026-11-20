@@ -4,7 +4,7 @@
   "private": true,
   "description": "Isolated Tribune Bangla premium news portal development",
   "scripts": {
-    "check": "node --check app.js && node --check api/share.js",
+    "check": "node --check app.js && node --check api/share.js && node --check api/sitemap.js && node --check api/robots.js",
     "test": "node scripts/smoke-test.mjs"
   }
 }
