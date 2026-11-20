@@ -57,7 +57,7 @@ assert.equal(vercel.rewrites[0].destination,"/api/sitemap");
 assert.equal(vercel.rewrites[1].destination,"/api/robots");
 assert.ok(vercel.rewrites.some(x=>x.source==="/post/:slug"&&x.destination==="/api/share?slug=:slug"));
 assert.match(sitemap,/sitemaps.org\/schemas\/sitemap/);
-assert.match(sitemap,/searchParams\\.set\\("status", "eq\\.published"\\)/);
+assert.match(sitemap,/searchParams\.set\("status", "eq\.published"\)/);
 assert.match(sitemap,/published_at/);
 assert.match(robots,/Sitemap:/);
 assert.match(robots,/Disallow: \/admin/);
