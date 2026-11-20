@@ -75,13 +75,13 @@ async function render(r){
   if(catsResult.error)throw catsResult.error;
   const cats=catsResult.data||[];
   const categoryPosts=await Promise.all(cats.map(c=>newsList({public:true,category:c.id,limit:4})));
-  const latestSection='<section class="section"><div class="section-head"><h2>সর্বশেষ সংবাদ</h2></div>'+(latest.length?'<div class="cards">'+latest.map(card).join("")+'</div>':empty("এখনো কোনো অনুমোদিত সংবাদ প্রকাশিত হয়নি"))+'</section>';
+  const latestSection='<section class="home-latest section"><div class="section-head"><h2>সর্বশেষ সংবাদ</h2><span class="home-section-note">সর্বশেষ প্রকাশিত প্রতিবেদন</span></div>'+(latest.length?'<div class="home-lead-grid"><div class="home-lead-main">'+heroStory(latest[0])+'</div><div class="home-lead-side">'+latest.slice(1,4).map(n=>'<article class="home-mini-story">'+(n.featured_image?'<a class="home-mini-image" href="/post/'+encodeURIComponent(n.slug)+'"><img src="'+esc(n.featured_image)+'" alt="'+esc(n.image_alt||n.title)+'" loading="lazy"></a>':'<div class="home-mini-image placeholder"></div>')+'<div><span class="kicker">'+esc(n.categories?.name||"সংবাদ")+'</span><h3><a href="/post/'+encodeURIComponent(n.slug)+'">'+esc(n.title)+'</a></h3><small class="muted">'+esc(date(n.published_at))+'</small></div></article>').join("")+'</div></div>':empty("এখনো কোনো অনুমোদিত সংবাদ প্রকাশিত হয়নি"))+'</section>';
   const categorySections=cats.map((c,i)=>{
    const posts=categoryPosts[i]||[];
    if(!posts.length)return "";
-   return '<section class="section"><div class="section-head"><h2>'+esc(c.name)+'</h2><a href="/category/'+encodeURIComponent(c.slug)+'">সব সংবাদ দেখুন</a></div><div class="cards">'+posts.slice(0,4).map(card).join("")+'</div></section>';
+   return '<section class="home-category-section section"><div class="section-head"><h2>'+esc(c.name)+'</h2><a href="/category/'+encodeURIComponent(c.slug)+'">সব সংবাদ দেখুন <span aria-hidden="true">›</span></a></div><div class="home-category-cards">'+posts.slice(0,4).map(card).join("")+'</div></section>';
   }).join("");
-  return latestSection+categorySections;
+  return '<div class="home-editorial">'+latestSection+categorySections+'</div>';
  }
  if(r.id==="category"){const {data:c}=await db.from("categories").select("id,name").eq("slug",r.p[0]).eq("is_active",true).maybeSingle();if(!c)return h("বিভাগ পাওয়া যায়নি")+empty();const ns=await newsList({public:true,category:c.id});return h(c.name)+(ns.length?'<div class="cards">'+ns.map(card).join("")+'</div>':empty());}
  if(r.id==="article"){
