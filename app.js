@@ -70,17 +70,17 @@ async function render(r){
  if(r.id==="home"){
   const [latest,hot,catsResult]=await Promise.all([
    newsList({public:true,limit:10}),
-   newsList({public:true,popular:true,limit:5}),
+   newsList({public:true,popular:true,limit:10}),
    db.from("categories").select("id,name,slug").eq("is_active",true).order("sort_order",{ascending:true})
   ]);
   if(catsResult.error)throw catsResult.error;
   const cats=catsResult.data||[];
   const categoryPosts=await Promise.all(cats.map(c=>newsList({public:true,category:c.id,limit:6})));
   const mini=(n,cls="")=>'<article class="news-mini '+cls+'">'+(n.featured_image?'<a class="news-mini-thumb" href="/post/'+encodeURIComponent(n.slug)+'"><img src="'+esc(n.featured_image)+'" alt="'+esc(n.image_alt||n.title)+'" loading="lazy"></a>':'<a class="news-mini-thumb placeholder" href="/post/'+encodeURIComponent(n.slug)+'"></a>')+'<div><span class="kicker">'+esc(n.categories?.name||"সংবাদ")+'</span><h3><a href="/post/'+encodeURIComponent(n.slug)+'">'+esc(n.title)+'</a></h3><small class="muted">'+esc(date(n.published_at))+'</small></div></article>';
-  const hotItems=(hot.length?hot:latest).slice(0,5);
-  const hotSection=hotItems.length?'<section class="home-hot"><h2>আলোচিত খবর</h2><div class="home-hot-grid">'+hotItems.map(n=>'<article class="home-hot-card"><a href="/post/'+encodeURIComponent(n.slug)+'">'+(n.featured_image?'<img src="'+esc(n.featured_image)+'" alt="'+esc(n.image_alt||n.title)+'" loading="lazy">':'<div class="placeholder"></div>')+'<h3>'+esc(n.title)+'</h3></a></article>').join("")+'</div></section>':"";
+  const hotItems=latest.slice(0,5);
+  const hotSection=hotItems.length?'<section class="home-hot"><h2>সর্বশেষ সংবাদ</h2><div class="home-hot-grid">'+hotItems.map(n=>'<article class="home-hot-card"><a href="/post/'+encodeURIComponent(n.slug)+'">'+(n.featured_image?'<img src="'+esc(n.featured_image)+'" alt="'+esc(n.image_alt||n.title)+'" loading="lazy">':'<div class="placeholder"></div>')+'<h3>'+esc(n.title)+'</h3></a></article>').join("")+'</div></section>':"";
   const lead=latest[0];
-  const leadSection=lead?'<div class="home-news-layout"><section class="home-lead-column">'+heroStory(lead)+'<div class="home-lower-grid">'+latest.slice(6,10).map(n=>mini(n)).join("")+'</div></section><section class="home-middle-column"><h2 class="home-column-title">সর্বশেষ সংবাদ</h2>'+latest.slice(1,6).map(n=>mini(n)).join("")+'</section><aside class="home-right-column"><div class="home-ad-slot">বিজ্ঞাপন</div><section class="home-popular"><h2 class="home-column-title">জনপ্রিয় সংবাদ</h2>'+(hot.length?hot.slice(0,6):latest.slice(1,7)).map((n,i)=>'<div class="home-rank-story"><b>'+String(i+1).padStart(2,"0")+'</b><a href="/post/'+encodeURIComponent(n.slug)+'">'+esc(n.title)+'</a></div>').join("")+'</section><div class="home-ad-slot home-ad-small">বিজ্ঞাপন</div></aside></div>':empty("এখনো কোনো অনুমোদিত সংবাদ প্রকাশিত হয়নি");
+  const leadSection=lead?'<div class="home-news-layout"><section class="home-lead-column">'+heroStory(lead)+'<div class="home-lower-grid">'+latest.slice(6,10).map(n=>mini(n)).join("")+'</div></section><section class="home-middle-column"><h2 class="home-column-title">সর্বশেষ সংবাদ</h2>'+latest.slice(1,6).map(n=>mini(n)).join("")+'</section><aside class="home-right-column"><div class="home-ad-slot">বিজ্ঞাপন</div><section class="home-popular"><h2 class="home-column-title">জনপ্রিয় সংবাদ</h2>'+(hot.length?hot:latest).slice(0,10).map((n,i)=>'<div class="home-rank-story"><b>'+String(i+1).padStart(2,"0")+'</b><a href="/post/'+encodeURIComponent(n.slug)+'">'+esc(n.title)+'</a></div>').join("")+'</section><section class="home-sidebar-latest"><h2 class="home-column-title">সর্বশেষ সংবাদ</h2>'+latest.slice(0,10).map((n,i)=>'<div class="home-rank-story"><b>'+String(i+1).padStart(2,"0")+'</b><a href="/post/'+encodeURIComponent(n.slug)+'">'+esc(n.title)+'</a></div>').join("")+'</section><div class="home-ad-slot home-ad-small">বিজ্ঞাপন</div></aside></div>':empty("এখনো কোনো অনুমোদিত সংবাদ প্রকাশিত হয়নি");
   const categorySections=cats.map((c,i)=>{
    const posts=categoryPosts[i]||[];
    if(!posts.length)return "";
