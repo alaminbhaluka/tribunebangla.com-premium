@@ -32,13 +32,22 @@ function decodeXml(value: string): string {
     .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
     .replace(/&quot;/g, '"').replace(/&apos;/g, "'");
 }
-function tag(block: string, names: string[]): string {
+function rawTag(block: string, names: string[]): string {
   for (const name of names) {
     const re = new RegExp("<(?:[\\w.-]+:)?" + name + "(?:\\s[^>]*)?>([\\s\\S]*?)</(?:[\\w.-]+:)?" + name + "\\s*>", "i");
     const match = block.match(re);
-    if (match) return decodeXml(match[1]).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    if (match) return decodeXml(match[1]).trim();
   }
   return "";
+}
+function plainText(value: string): string {
+  return value.replace(/<script\b[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style\b[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ").replace(/&nbsp;/gi, " ")
+    .replace(/\s+/g, " ").trim();
+}
+function tag(block: string, names: string[]): string {
+  return plainText(rawTag(block, names));
 }
 function itemLink(block: string): string | null {
   const atom = block.match(/<link\b[^>]*href=["']([^"']+)["'][^>]*>/i);
@@ -57,11 +66,16 @@ function rssItems(xml: string, source: {name:string;url:string}) {
     const title = tag(block, ["title"]).slice(0, 500);
     const link = itemLink(block);
     if (!title || !link) continue;
-    const excerpt = tag(block, ["description", "summary", "encoded", "content"]).slice(0, 280);
+    // Prefer full RSS/Atom content when the publisher provides it.
+    // Otherwise retain the complete available description as the article body.
+    const bodyRaw = rawTag(block, ["encoded", "content", "description", "summary"]);
+    const bodyText = plainText(bodyRaw);
+    const body = bodyText.length >= 40 ? bodyRaw.slice(0, 50000) : null;
+    const excerpt = (bodyText || tag(block, ["description", "summary"])).slice(0, 280);
     const external = tag(block, ["guid", "id"]).slice(0, 300) || link;
     out.push({
       source_name: source.name, source_url: link, external_id: external,
-      title, excerpt: excerpt || null, body: null, image_url: imageLink(block),
+      title, excerpt: excerpt || null, body, image_url: imageLink(block),
       category_id: null, status: "pending"
     });
   }
