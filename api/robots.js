@@ -8,7 +8,7 @@ module.exports = function handler(req, res) {
   try {
     const parsed = new URL(candidate);
     const allowed = new Set(["tribunebangla.com", "www.tribunebangla.com", "preview.tribunebangla.com"]);
-    if (parsed.protocol === "https:" && !parsed.username && !parsed.password && (allowed.has(parsed.hostname) || /^[a-z0-9.-]+\\.vercel\\.app$/i.test(parsed.hostname))) origin = parsed.origin;
+    if (parsed.protocol === "https:" && !parsed.username && !parsed.password && (allowed.has(parsed.hostname) || /^[a-z0-9.-]+\.vercel\.app$/i.test(parsed.hostname))) origin = parsed.origin;
   } catch (_) {}
   const body = [
     "User-agent: *",
