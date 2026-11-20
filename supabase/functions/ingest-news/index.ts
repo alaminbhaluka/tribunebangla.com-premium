@@ -164,6 +164,22 @@ async function collectRss(supabaseUrl: string, serviceKey: string) {
   });
   if (!insertResponse.ok) throw new Error("Queue insertion failed: " + (await insertResponse.text()).slice(0,500));
 
+  // Enrich already-queued pending headlines when a later feed refresh exposes
+  // the publisher's full RSS body. Never overwrite an editor's existing body.
+  for (const item of limited) {
+    if (typeof item.body !== "string" || !item.body.trim()) continue;
+    const enrichUrl = new URL("/rest/v1/auto_news_queue", supabaseUrl);
+    enrichUrl.searchParams.set("source_url", "eq." + String(item.source_url));
+    enrichUrl.searchParams.set("status", "eq.pending");
+    enrichUrl.searchParams.set("body", "is.null");
+    const enrichResponse = await rest(enrichUrl, serviceKey, {
+      method: "PATCH",
+      headers: {"Content-Type":"application/json", Prefer:"return=minimal"},
+      body: JSON.stringify({body:item.body, excerpt:item.excerpt, image_url:item.image_url})
+    });
+    if (!enrichResponse.ok) throw new Error("Unable to enrich queued RSS body: " + (await enrichResponse.text()).slice(0,300));
+  }
+
   const uniqueUrls = [...new Set(limited.map(x => String(x.source_url)))];
   const queueUrl = new URL("/rest/v1/auto_news_queue", supabaseUrl);
   queueUrl.searchParams.set("select", "id,title,excerpt,source_url,status");
