@@ -19,7 +19,7 @@ Isolated development project for the approved 18-page Tribune Bangla redesign.
 ## Implemented in this branch
 - Responsive Bengali news portal shell and 18 page families.
 - Supabase client configuration using a publishable key only.
-- Phone + password signup/login UI (OTP-free signup requires Phone confirmations disabled in Supabase Auth settings).
+- Phone + password signup/login UI with OTP-free phone confirmation; email signup may require email confirmation.
 - Araler Khobor reference-matched Tribune Bangla homepage with a red trending-news band, lead-story layout, country/latest/popular sidebar, related-story article layout, and category navigation, public published-news listing, category pages, article pages, video and e-paper sections, and search.
 - Reader profile, private saved-news library with save/remove actions, notification center for reporter-application and article-publication updates, and reporter application form.
 - Reporter dashboard and draft/pending article submission.
