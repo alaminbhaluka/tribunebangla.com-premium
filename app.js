@@ -68,16 +68,20 @@ function table(rows,allowDelete=true){if(!rows.length)return empty();return '<di
 async function render(r){
  if(!db)return h("সংযোগ কনফিগারেশন প্রয়োজন")+msg("Supabase public config.js পাওয়া যায়নি।","error");
  if(r.id==="home"){
-  const [ns,popularAll,countryResult]=await Promise.all([
-   newsList({public:true,limit:18}),
-   newsList({public:true,popular:true,limit:5}),
-   db.from("categories").select("id").eq("slug","country").maybeSingle()
+  const [latest,catsResult]=await Promise.all([
+   newsList({public:true,limit:4}),
+   db.from("categories").select("id,name,slug").eq("is_active",true).order("sort_order",{ascending:true})
   ]);
-  const [countryLatest,popular]=countryResult.data?await Promise.all([newsList({public:true,category:countryResult.data.id,limit:5}),newsList({public:true,popular:true,category:countryResult.data.id,limit:5})]):[ns.slice(0,5),popularAll];
-  const hot=popular.some(x=>Number(x.view_count)>0)?popular:countryLatest;
-  const hero=ns[0],rest=ns.slice(1,7);
-  return '<section class="akh-hot"><h2>জ্বলছে / আলোচিত খবর</h2><div class="akh-hot-grid">'+hot.map(hotCard).join("")+'</div></section>'+
-   (hero?'<section class="akh-main-grid"><div class="akh-main-column">'+heroStory(hero)+'<div class="akh-story-grid">'+rest.map(card).join("")+'</div></div>'+sidebarMarkup(countryLatest,popular,"সর্বশেষ - সারাদেশ","সর্বাধিক পঠিত - সারাদেশ")+'</section>':empty("এখনো কোনো অনুমোদিত সংবাদ প্রকাশিত হয়নি"));
+  if(catsResult.error)throw catsResult.error;
+  const cats=catsResult.data||[];
+  const categoryPosts=await Promise.all(cats.map(c=>newsList({public:true,category:c.id,limit:4})));
+  const latestSection='<section class="section"><div class="section-head"><h2>সর্বশেষ সংবাদ</h2></div>'+(latest.length?'<div class="cards">'+latest.map(card).join("")+'</div>':empty("এখনো কোনো অনুমোদিত সংবাদ প্রকাশিত হয়নি"))+'</section>';
+  const categorySections=cats.map((c,i)=>{
+   const posts=categoryPosts[i]||[];
+   if(!posts.length)return "";
+   return '<section class="section"><div class="section-head"><h2>'+esc(c.name)+'</h2><a href="/category/'+encodeURIComponent(c.slug)+'">সব সংবাদ দেখুন</a></div><div class="cards">'+posts.slice(0,4).map(card).join("")+'</div></section>';
+  }).join("");
+  return latestSection+categorySections;
  }
  if(r.id==="category"){const {data:c}=await db.from("categories").select("id,name").eq("slug",r.p[0]).eq("is_active",true).maybeSingle();if(!c)return h("বিভাগ পাওয়া যায়নি")+empty();const ns=await newsList({public:true,category:c.id});return h(c.name)+(ns.length?'<div class="cards">'+ns.map(card).join("")+'</div>':empty());}
  if(r.id==="article"){
