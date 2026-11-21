@@ -66,12 +66,12 @@ function rssItems(xml: string, source: {name:string;url:string}) {
     const title = tag(block, ["title"]).slice(0, 500);
     const link = itemLink(block);
     if (!title || !link) continue;
-    // Prefer full RSS/Atom content when the publisher provides it.
-    // Otherwise retain the complete available description as the article body.
-    const bodyRaw = rawTag(block, ["encoded", "content", "description", "summary"]);
+    // Only publisher-supplied full-content fields may become the article body.
+    // RSS description/Atom summary is an excerpt, never a full article.
+    const bodyRaw = rawTag(block, ["encoded", "content"]);
     const bodyText = plainText(bodyRaw);
-    const body = bodyText.length >= 40 ? bodyRaw.slice(0, 50000) : null;
-    const excerpt = (bodyText || tag(block, ["description", "summary"])).slice(0, 280);
+    const body = bodyText.length >= 500 ? bodyRaw.slice(0, 50000) : null;
+    const excerpt = (tag(block, ["description", "summary"]) || bodyText).slice(0, 280);
     const external = tag(block, ["guid", "id"]).slice(0, 300) || link;
     out.push({
       source_name: source.name, source_url: link, external_id: external,
