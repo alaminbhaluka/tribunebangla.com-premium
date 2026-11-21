@@ -69,7 +69,7 @@ async function render(r){
  if(!db)return h("সংযোগ কনফিগারেশন প্রয়োজন")+msg("Supabase public config.js পাওয়া যায়নি।","error");
  if(r.id==="home"){
   const [latest,popular,catsResult]=await Promise.all([
-   newsList({public:true,limit:6}),
+   newsList({public:true,limit:10}),
    newsList({public:true,popular:true,limit:10}),
    db.from("categories").select("id,name,slug").eq("is_active",true).order("sort_order",{ascending:true})
   ]);
@@ -79,7 +79,7 @@ async function render(r){
   const orderedCats=national?[national,...cats.filter(c=>c.id!==national.id)]:cats;
   const categoryPosts=await Promise.all(orderedCats.map(c=>newsList({public:true,category:c.id,limit:4})));
   const mini=(n,cls="")=>'<article class="news-mini '+cls+'">'+(n.featured_image?'<a class="news-mini-thumb" href="/post/'+encodeURIComponent(n.slug)+'"><img src="'+esc(n.featured_image)+'" alt="'+esc(n.image_alt||n.title)+'" loading="lazy"></a>':'<a class="news-mini-thumb placeholder" href="/post/'+encodeURIComponent(n.slug)+'"></a>')+'<div><span class="kicker">'+esc(n.categories?.name||"সংবাদ")+'</span><h3><a href="/post/'+encodeURIComponent(n.slug)+'">'+esc(n.title)+'</a></h3><small class="muted">'+esc(date(n.published_at))+'</small></div></article>';
-  const hotSection=latest.length?'<section class="home-hot"><h2>সর্বশেষ সংবাদ</h2><div class="home-hot-grid home-hot-grid-six">'+latest.map(n=>'<article class="home-hot-card"><a href="/post/'+encodeURIComponent(n.slug)+'">'+(n.featured_image?'<img src="'+esc(n.featured_image)+'" alt="'+esc(n.image_alt||n.title)+'" loading="lazy">':'<div class="placeholder"></div>')+'<h3>'+esc(n.title)+'</h3></a></article>').join("")+'</div></section>':"";
+  const hotSection=latest.length?'<section class="home-hot"><h2>সর্বশেষ সংবাদ</h2><div class="home-hot-grid home-hot-grid-six">'+latest.slice(0,6).map(n=>'<article class="home-hot-card"><a href="/post/'+encodeURIComponent(n.slug)+'">'+(n.featured_image?'<img src="'+esc(n.featured_image)+'" alt="'+esc(n.image_alt||n.title)+'" loading="lazy">':'<div class="placeholder"></div>')+'<h3>'+esc(n.title)+'</h3></a></article>').join("")+'</div></section>':"";
   const categorySections=orderedCats.map((c,i)=>{
    const posts=(categoryPosts[i]||[]).slice(0,4);
    if(!posts.length)return "";
