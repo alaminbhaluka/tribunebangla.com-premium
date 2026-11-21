@@ -50,8 +50,9 @@ assert.match(css,/\.home-national-grid\{display:grid;grid-template-columns:repea
 
 assert.match(app,/select\("id,name,slug"\).*is_active/);
 assert.match(app,/সর্বশেষ সংবাদ/);
-assert.match(app,/posts\.slice\(1,4\)\.map\(n=>mini\(n\)\)/,"Non-national category sections must show up to three secondary stories");
-assert.match(app,/সব সংবাদ দেখুন/);
+assert.match(app,/heroSide=latest\.slice\(1,3\)/,"Homepage hero must show two secondary lead stories");
+assert.match(app,/recentMini=latest\.slice\(5,9\)/,"Recent-news section must show four compact stories");
+assert.match(app,/আরও সংবাদ/);
 assert.match(app,/increment_news_view/);
 assert.match(app,/view_count/);
 assert.match(app,/category-form/);
