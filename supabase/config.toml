@@ -1,0 +1,4 @@
+[functions.ingest-news]\nverify_jwt = false\n
+
+[functions.invite-staff]
+verify_jwt = true

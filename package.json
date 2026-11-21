@@ -1,0 +1,10 @@
+{
+  "name": "tribunebangla-premium",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Isolated Tribune Bangla premium news portal development",
+  "scripts": {
+    "check": "node --check app.js && node --check api/auto-news.js && node --check api/share.js && node --check api/sitemap.js && node --check api/robots.js && node --check scripts/smoke-test.mjs",
+    "test": "node scripts/smoke-test.mjs"
+  }
+}
